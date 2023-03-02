@@ -1,9 +1,12 @@
+import React from 'react';
+import './header.css'
+
 function Header() {
     return (
-      <nav class="nav">
+      <nav className="nav custom-header">
         <h3>
           Placeholder
-          <small class="text-muted"> text</small>
+          <small className="text-muted"> text</small>
         </h3>
       </nav>
     );
