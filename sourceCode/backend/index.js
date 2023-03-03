@@ -4,13 +4,24 @@ const PORT = process.env.PORT || 3001;
 
 const app = express();
 
-const persona = ["Albert Einstein", "Contrarian", "Hedonist"]
+const persona = [{ 
+  name :"Albert Einstein", 
+  initialPrompt : ""
+}, {
+  name: "Contrarian",
+  initialPrompt : ""
+}, {
+  name : "Hedonist", 
+  initialPrompt : ""
+}] //TODO: prebaciti podatke u bazu kad se odredi sto sve ide u bazu
 
+//solution to invalid requests from the frontend
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   next();
 });
 
+//returning a list of persona for the user to choose from
 app.get("/api", (req, res) => {
     res.json(persona);
 });

@@ -2,18 +2,26 @@ import React from 'react';
 import { useContext, useEffect, useState } from 'react';
 import './SelectOption.css'
 import RadioButton from '../RadioButton/RadioButton'
+import PersonaSelector from '../PersonaSelector/PersonaSelector'
 import RadioContext from '../../Context/RadioContext';
 
-function SelectOption() {
+function SelectOption(props) {
 
     return (
-        <div class="container-fluid d-flex flex-column justify-content-center align-items-center">
-            <div class="element">
+        <div>
+            <div className="d-flex flex-rowalign-items-center justify-content-center ">
                 <h4>Select a persona:</h4>
             </div>
-            <div class="element">
-                <RadioButton name = "Text" image = "favicon.ico"></RadioButton>
-                <RadioButton name = "Visual" image = "favicon.ico"></RadioButton>
+            <div>
+                <div className='d-flex flex-row flex-wrap align-items-center justify-content-around'>
+                    <div className="p-3">
+                        <PersonaSelector persona = {props.persona}></PersonaSelector>
+                    </div>
+                    <div className="p-3">
+                        <RadioButton name = "Text" image = "favicon.ico"></RadioButton>
+                        <RadioButton name = "Visual" image = "favicon.ico"></RadioButton>
+                    </div>
+                </div>
             </div>
         </div>
     );

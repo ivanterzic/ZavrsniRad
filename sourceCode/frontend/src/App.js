@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
 import {useEffect, createContext, useContext} from "react";
 import './App.css';
-import Header from './Components/header/header'
 import SelectOption from './Components/SelectOption/SelectOption'
 import RadioContext from './Context/RadioContext';
 import { RadioProvider } from './Context/RadioContext';
-import API from "./api";
-
-
-
+import PersonaContext, { PersonaProvider } from './Context/PersonaContext';
+//import API from "./api";
+import Chatbot from './Components/Chatbot/Chatbot';
+import axios from 'axios';
 
 function App() {
   const { radio, setRadio } = useContext(RadioContext);
+  const { persona, setPersona } = useContext(PersonaContext);
   const [data, setData] = React.useState();
 
   async function fillPersona(){
     try {
-      const response = await API.get("/");
+      const response = await axios.get("http://localhost:3001/api");
       setData(response.data);
+      setPersona(response.data);
     } catch (e) {
       console.log(e);
     } 
@@ -29,8 +30,7 @@ function App() {
 
   return (
       <div className="App">
-        <Header></Header>
-        <SelectOption></SelectOption>
+        <SelectOption persona = {data}></SelectOption>
         <header className="App-header">
           <p>
             {!data ? "Loading persona..." : data.map( (d) => {
@@ -42,7 +42,7 @@ function App() {
 
           <div>
             {radio === "Text" ? 
-              <div>Text placeholder</div>
+              <Chatbot></Chatbot>
             :
               <div>Visual placeholder</div>
             }
