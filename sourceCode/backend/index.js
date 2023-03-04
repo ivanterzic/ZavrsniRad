@@ -15,7 +15,7 @@ const persona = [{
   initialPrompt : ""
 }] //TODO: prebaciti podatke u bazu kad se odredi sto sve ide u bazu
 
-//solution to invalid requests from the frontend
+//solution to fix invalid requests from the frontend (request header parameter error)
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   next();

@@ -10,14 +10,14 @@ import { PersonaProvider } from './Context/PersonaContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+ 
     <RadioProvider>
       <PersonaProvider>
         <Header></Header>
         <App />
       </PersonaProvider>
     </RadioProvider>
-  </React.StrictMode>
+  
 );
 
 
