@@ -1,5 +1,4 @@
 import React from 'react';
-import { useEffect } from "react";
 import { createContext, useState } from "react";
 
 const PersonaContext = createContext();

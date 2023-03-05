@@ -1,49 +1,41 @@
-import React, { useState } from 'react';
-import {useEffect, createContext, useContext} from "react";
+import React from 'react';
+import {useEffect, useContext, useState} from "react";
 import './App.css';
 import SelectOption from './Components/SelectOption/SelectOption'
 import RadioContext from './Context/RadioContext';
-import { RadioProvider } from './Context/RadioContext';
-import PersonaContext, { PersonaProvider } from './Context/PersonaContext';
-//import API from "./api";
+import PersonaContext from './Context/PersonaContext';
 import Chatbot from './Components/Chatbot/Chatbot';
 import axios from 'axios';
 
 function App() {
   const { radio, setRadio } = useContext(RadioContext);
-  const { persona, setPersona } = useContext(PersonaContext);
-  const [data, setData] = React.useState();
+  const { persona, setPersona } = useContext(PersonaContext); //used for storing a selected persona
+  const [data, setData] = useState([]); //used for an array of specific persona a user is able to select
 
-  async function fillPersona(){
+  async function fillData(){
     try {
       const response = await axios.get("http://localhost:3001/api");
       setData(response.data);
-      setPersona(response.data);
     } catch (e) {
       console.log(e);
     } 
   }
 
   useEffect(() => {
-    fillPersona()
+    fillData()
   }, []);
+
+  //useEffect(() => {console.log(data)}, [data]); //printing data to make sure it is ok!
 
   return (
       <div className="App">
-        <SelectOption persona = {data}></SelectOption>
         <header className="App-header">
-          <p>
-            {!data ? "Loading persona..." : data.map( (d) => {
-              return(
-                d + " "
-              )
-            })}
-          </p>
-
+        <SelectOption data = {data}></SelectOption>
           <div>
             {radio === "Text" ? 
+              //persona ? (<Chatbot></Chatbot>) : null
               <Chatbot></Chatbot>
-            :
+              :
               <div>Visual placeholder</div>
             }
           </div>

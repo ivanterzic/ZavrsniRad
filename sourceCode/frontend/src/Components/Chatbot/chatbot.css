@@ -1,10 +1,19 @@
 .chat-wrapper{
     margin: 1%;
-    width: 85%;
-    height: 400px;
+    width: 90%;
     border-style: solid;
-    border-color: goldenrod;
+    border-color: green;
     border-radius: 10px;
+}
+
+.chat-header{
+    padding: 2%;
+}
+
+.chat-body{
+    padding: 1%;
+    height: 450px;
+    width: 100%;
 }
 
 .chat-message{
@@ -26,4 +35,8 @@
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 20px;
+}
+
+.input-form{
+    width: 70%;
 }
