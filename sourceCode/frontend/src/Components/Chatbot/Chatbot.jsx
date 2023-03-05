@@ -137,7 +137,7 @@ function Chatbot() {
       </div>
       
 
-      <div className='container-fluid d-flex flex-row align-items-center justify-content-center flex-wrap'>
+      <div className='container-fluid d-flex flex-row align-items-center justify-content-center flex-wrap input-wrap'>
         
           <input className='form-control form-control-md input-form' type="text" onChange = {(e) => setUserTextInput(e.target.value)} value = {userTextInput} placeholder = 
           {

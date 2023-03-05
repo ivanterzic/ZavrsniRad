@@ -38,5 +38,10 @@
 }
 
 .input-form{
-    width: 70%;
+    display: inline-block;
+    max-width: 600px;
+}
+
+.input-wrap{
+    margin-bottom: 2%;
 }
