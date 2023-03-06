@@ -1,0 +1,19 @@
+model -> gpt-3.5-turbo
+
+messages -> kontekst u zadanom chat formatu kojeg predajemo za completion
+
+temperature [0-2] -> output od fokusiranog i determističkog pa sve do random outputa //defaults to 1
+
+top_p [0-1] -> uzima x najboljih rezultata/tokena u obzir //preporuka ne mijenjati i ovo i temperaturu
+
+n -> koliko //1 jer cu tak i tak uzet 1, a ovako ce dulje trajati
+
+stream i stop nebitni u nasem kontekstu
+
+max-tokens 
+
+presence_penalty [-2 - 2] -> povecavanjem broja se povecava vjerojatnost da ce model pricati o novoj temi
+
+frequency_penalty [-2 - 2] -> analogno
+
+logit_bias i user -> nebitno za nas

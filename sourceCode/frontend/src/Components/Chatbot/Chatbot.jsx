@@ -6,6 +6,8 @@ const { Configuration, OpenAIApi } = require("openai");
 
 function Chatbot() {
 
+  const model = "gpt-3.5-turbo"
+
   const openAIKey = "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"
   const configuration = new Configuration({ apiKey: openAIKey, });
   const openai = new OpenAIApi(configuration);
@@ -17,6 +19,23 @@ function Chatbot() {
   const [status, setStatus] = useState("No")
   let loadInterval
 
+  async function sendCompletionRequest() {
+    //slannje dodatnih parametara JAKO usporava zahtjeve
+    const response = await openai.createChatCompletion({
+      model: model,
+      messages: chatData,
+      
+      temperature : 0.8, //2 je too much, daje prerandom odgovore, 0.8 je okej
+
+      //top_p : 1,
+      
+      //max_tokens : , 
+      
+      presence_penalty : 1.3,
+      //frequency_penalty : 1
+    })
+    return response
+  }
   
   function scrollDown(e) {
     e.scrollTop = e.scrollHeight;
@@ -43,6 +62,7 @@ function Chatbot() {
     if (persona){
       setPersonaObj(JSON.parse(persona))
       console.log("Promijenjena persona i zadan persona object")
+      setChatData([])
     }
   }, [persona])
 
@@ -60,10 +80,14 @@ function Chatbot() {
         chatData.push({"role" : "user", "content" : prompt})
         console.log(chatData)
         
-        const response = await openai.createChatCompletion({
+        let response = await sendCompletionRequest()
+
+        /*const response = await openai.createChatCompletion({
           model: "gpt-3.5-turbo",
           messages: chatData,
-        });
+        });*/
+
+        //ako je kod 429 preopterecenje dodaj
 
         console.log("Initial message sent")
         console.log(response.data.choices[0].message);
@@ -97,7 +121,8 @@ function Chatbot() {
     loader(div)
     
     scrollDown(document.getElementById("chat-body"))
-    const response = await openai.createChatCompletion({model: "gpt-3.5-turbo", messages: chatData});
+    let response = await sendCompletionRequest()
+    /*const response = await openai.createChatCompletion({model: "gpt-3.5-turbo", messages: chatData});*/
 
 
     console.log(response.data.choices[0].message);
@@ -139,16 +164,12 @@ function Chatbot() {
 
       <div className='container-fluid d-flex flex-row align-items-center justify-content-center flex-wrap input-wrap'>
         
-          <input className='form-control form-control-md input-form' type="text" onChange = {(e) => setUserTextInput(e.target.value)} value = {userTextInput} placeholder = 
-          {
-            status === "Pending" ? "Establishing a connection..." : !personaObj ? "No persona selected!" : "Ask " + personaObj.name + " something..."}
-            />
-        
+          <input className='form-control form-control-md input-form' type="text" onChange = {(e) => setUserTextInput(e.target.value)} value = {userTextInput} placeholder = {status === "Pending" ? "Establishing a connection..." : !personaObj ? ("No persona selected!") : "Ask " + personaObj.name + " something..."} disabled = {!personaObj || status === "Pending" ? true : false}/>
         
         <button className='btn btn-success' onClick = { (e) => {
           !personaObj ? alert("Message cannot be sent without a selected persona!") : 
             status !== "Active" ? alert("Connection not yet established!")
-            : sendPrompt()} }>Send message</button>
+            : sendPrompt()} } disabled = {!personaObj || status === "Pending" ? true : false}>Send message</button>
       </div> 
       {document.getElementById("chat-body") ? scrollDown(document.getElementById("chat-body")) : null}
     </div>
