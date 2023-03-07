@@ -13,6 +13,7 @@
     "react-native": "^0.71.3",
     "react-native-web": "^0.18.12",
     "react-scripts": "5.0.1",
+    "react-speech-kit": "^3.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
