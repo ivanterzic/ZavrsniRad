@@ -1,4 +1,5 @@
 model -> gpt-3.5-turbo
+stari modeli tipa davinci i sl. se mogu "trenirati" (fine-tuned models), gpt-3.5-turbo ne, ali on je model iza ChatGPT
 
 messages -> kontekst u zadanom chat formatu kojeg predajemo za completion
 
@@ -17,3 +18,9 @@ presence_penalty [-2 - 2] -> povecavanjem broja se povecava vjerojatnost da ce m
 frequency_penalty [-2 - 2] -> analogno
 
 logit_bias i user -> nebitno za nas
+
+
+
+žrtvovati uvjerljivost govora (react-voice-kit/Google API) za brzinu, možda limitirati max tokens pa koristiti Google API? (Potencijalan kompromis)
+
+form i basic interactive!

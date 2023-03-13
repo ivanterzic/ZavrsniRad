@@ -3,11 +3,18 @@ import './header.css'
 
 function Header() {
     return (
-      <nav className="nav custom-header">
-        <h3>
+      <nav className="nav custom-header d-flex flex-row allign-items-center justify-content-between">
+        <a href="/"><h3>
           Placeholder
-          <small className="text-muted"> text</small>
-        </h3>
+          text
+        </h3></a>
+        
+        <div className="d-flex flex-row allign-items-center justify-content-around w-25">
+          <div><a href='login'>Login</a></div>
+
+          <div><a href='modify'>Modify</a></div>
+        </div>
+        
       </nav>
     );
 }

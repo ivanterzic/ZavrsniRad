@@ -20,7 +20,7 @@ function Chatbot() {
   let loadInterval
 
   async function sendCompletionRequest() {
-    //slannje dodatnih parametara JAKO usporava zahtjeve
+
     const response = await openai.createChatCompletion({
       model: model,
       messages: chatData,

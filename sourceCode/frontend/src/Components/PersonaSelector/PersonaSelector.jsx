@@ -24,14 +24,17 @@ function PersonaSelector(props) {
             </select>
             <button type="button" className="btn btn-success" onClick={(e) => {
                 let val = document.getElementById("persona-select").value
-                //console.log(val)
-                let resp = window.confirm("Are you sure you want to select this persona: " + JSON.parse(val).name + "? Current chat data will be deleted! ")
-                if (resp){
-                    setPersona(val)
-                    console.log("Persona selected : " + val)
-                }
-                else {
-                    console.log("Action was cancelled. No persona change has occured.")
+                console.log(JSON.parse(val))
+                
+                if (!persona || JSON.parse(val).name !== JSON.parse(persona).name) {
+                    let resp = window.confirm("Are you sure you want to select this persona: " + JSON.parse(val).name + "? Current chat data will be deleted! ")
+                    if (resp){
+                        setPersona(val)
+                        console.log("Persona selected : " + val)
+                    }
+                    else {
+                        console.log("Action was cancelled. No persona change has occured.")
+                    }
                 }
             }}>Submit</button>
         </div>

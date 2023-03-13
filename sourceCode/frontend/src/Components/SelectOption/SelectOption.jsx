@@ -17,7 +17,7 @@ function SelectOption(props) {
                 <h4>Select a chat option:</h4>
                 <div className="p-3 d-flex flex-row flex-nowrap">
                     <RadioButton name = "Text" image = "favicon.ico"></RadioButton>
-                    <RadioButton name = "Visual" image = "favicon.ico"></RadioButton>
+                    <RadioButton name = "Interactive" image = "favicon.ico"></RadioButton>
                 </div>
             </div>
         </div>
