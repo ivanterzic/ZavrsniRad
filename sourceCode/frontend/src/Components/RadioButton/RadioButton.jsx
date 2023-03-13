@@ -12,22 +12,22 @@ function RadioButton(props) {
         <>
             {radio === props.name ?
             <>
-                <input type="radio" className="btn-check" name="options" id={props.name} onClick={(e)=>{
+                <input type="radio" className="btn btn-check" name="options" id={props.name} onClick={(e)=>{
                     setRadio(props.name)
                     //console.log("changed")
                 }} selected></input>
-                <label className="btn btn-outline-dark active" for={props.name}>
+                <label className="btn btn-outline-dark active" htmlFor={props.name}>
                     {props.name}
                     <img src={props.image} alt={props.name}></img>
                 </label>
             </> 
                 :
             <>
-                <input type="radio" className="btn-check" name="options" id={props.name} onClick={(e)=>{
+                <input type="radio" className="btn btn-check" name="options" id={props.name} onClick={(e)=>{
                 setRadio(props.name)
                 //console.log("changed")
                 }}></input>
-                <label className="btn btn-outline-dark" for={props.name}>
+                <label className="btn btn-outline-dark" htmlFor={props.name}>
                     {props.name}
                     <img src={props.image} alt={props.name}></img>
                 </label>

@@ -2,9 +2,11 @@ import React from 'react';
 import { useContext, useState } from 'react';
 import './PersonaSelector.css'
 import PersonaContext from '../../Context/PersonaContext';
+import ChatDataContext from '../../Context/ChatDataContext';
 
 function PersonaSelector(props) {
     const {persona, setPersona} = useContext(PersonaContext)
+    const {chatData, setChatData} = useContext(ChatDataContext)
     const [value, setValue] = useState();
     const data = props.data
 
@@ -31,6 +33,7 @@ function PersonaSelector(props) {
                     if (resp){
                         setPersona(val)
                         console.log("Persona selected : " + val)
+                        setChatData([])
                     }
                     else {
                         console.log("Action was cancelled. No persona change has occured.")

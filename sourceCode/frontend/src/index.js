@@ -8,29 +8,39 @@ import Modify from './Pages/Modify';
 import App from './App';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import { RadioProvider } from './Context/RadioContext';
+import {RadioProvider} from './Context/RadioContext';
 import Header from './Components/Header/Header'
-import { PersonaProvider } from './Context/PersonaContext';
+import {PersonaProvider} from './Context/PersonaContext';
+import {ChatDataProvider} from './Context/ChatDataContext';
+import {DisabledProvider} from './Context/DisabledContext';
+import { UserTextInputProvider } from './Context/UserInputContext';
 import NoPage from './Pages/NoPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
-    <RadioProvider>
-      <PersonaProvider>
-        <Router>
-          <Header></Header>
-          <Routes>
-              <Route path="/" element={<Body />} />
-              <Route path ="login" element={<Login />} />
-              <Route path="modify" element={<Modify />} />
-              <Route path="*" element={<NoPage />}>
-            </Route>
-          </Routes>
-        </Router>
-      </PersonaProvider>
-    </RadioProvider>
-    <App />
+  <UserTextInputProvider>
+    <DisabledProvider>
+      <ChatDataProvider>
+        <RadioProvider>
+            <PersonaProvider>
+              <Router>
+                <Header></Header>
+                <Routes>
+                    <Route path="/" element={<Body />} />
+                    <Route path ="login" element={<Login />} />
+                    <Route path="modify" element={<Modify />} />
+                    <Route path="*" element={<NoPage />}>
+                  </Route>
+                </Routes>
+              </Router>
+            </PersonaProvider>
+          </RadioProvider>
+      </ChatDataProvider>
+    </DisabledProvider>
+  </UserTextInputProvider>
+  <App />
+  
   </>
   
       
