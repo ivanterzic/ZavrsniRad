@@ -36,7 +36,7 @@ function SpeechToText(props) {
             if (speechInput.trim() !== ""){
               await setUserTextInput(speechInput)
               setUserTextInput(speechInput)
-              let r = await sendPrompt(chatData, setChatData, speechInput, setUserTextInput)
+              let r = await sendPrompt(chatData, setChatData, speechInput, setUserTextInput, setDisabled)
               console.log(r)
               props.setSpeakData(r)
               setSpeechInput("")

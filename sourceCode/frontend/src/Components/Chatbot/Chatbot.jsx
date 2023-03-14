@@ -35,6 +35,8 @@ function Chatbot() {
     !personaObj || status === "Pending" ? setDisabled(true) : setDisabled(false)
   }, [status, personaObj])
 
+  console.log(chatData)
+
   return (
     <div className='container-fluid d-flex flex-column align-items-center justify-content-center'>
       <div className='chat-wrapper'>
@@ -64,7 +66,7 @@ function Chatbot() {
       <div className='container-fluid d-flex flex-row align-items-center justify-content-center flex-wrap input-wrap'>
         <input className='form-control form-control-md input-form' type="text" onChange = {(e) => setUserTextInput(e.target.value)} value = {userTextInput} placeholder = {status === "Pending" ? "Establishing a connection..." : !personaObj ? ("No persona selected!") : "Ask " + personaObj.name + " something..."} disabled = {!personaObj || status === "Pending" ? true : false}/>
         <button className='btn btn-success' onClick = { (e) => {
-          if (userTextInput.trim() !== "") sendPrompt(chatData, setChatData, userTextInput, setUserTextInput)} } disabled = {disabled}>Send message</button>
+          if (userTextInput.trim() !== "") sendPrompt(chatData, setChatData, userTextInput, setUserTextInput, setDisabled)} } disabled = {disabled}>Send message</button>
       </div> 
       {document.getElementById("chat-body") ? scrollDown(document.getElementById("chat-body")) : null}
     </div>

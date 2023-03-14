@@ -48,7 +48,7 @@ function Interactive() {
                         }} value = {userTextInput} placeholder = {status === "Pending" ? "Establishing a connection..." : !personaObj ? ("No persona selected!") : "Ask " + personaObj.name + " something..."} disabled = {!personaObj || status === "Pending" ? true : false}/>
                         <button className='btn btn-success' onClick = { async (e) => {
                           if (userTextInput.trim() !== ""){
-                            let r = await sendPrompt(chatData, setChatData, userTextInput, setUserTextInput)
+                            let r = await sendPrompt(chatData, setChatData, userTextInput, setUserTextInput, setDisabled)
                             console.log(r)
                             setSpeakData(r)
                           }
