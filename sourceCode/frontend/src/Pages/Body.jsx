@@ -16,7 +16,7 @@ function App() {
 
   async function fillData(){
     try {
-      const response = await axios.get("http://localhost:3001/api");
+      const response = await axios.get("http://localhost:3001/personadata");
       setData(response.data);
       setLoaded(true)
     } catch (e) {

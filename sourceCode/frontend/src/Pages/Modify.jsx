@@ -20,7 +20,7 @@ function App() {
         </div>
 
         <div className='container-fluid d-flex flex-row align-items-center justify-content-around p-1'>
-          <label htmlFor='mention'>Mention:</label>
+          <label htmlFor='mention'>Mention if AI:</label>
           <select name = "mention" className="form-select w-50">
             <option selected value={false}>No</option>
             <option value={true}>Yes</option>
@@ -28,7 +28,7 @@ function App() {
         </div>
 
         <div className='container-fluid d-flex flex-row align-items-center justify-content-around p-1'>
-          <label htmlFor='mention'>Level</label>
+          <label htmlFor='mention'>School Level</label>
           <select name = "mention" className="form-select w-50">
             <option selected value={false}>Elementary school</option>
             <option value={true}>Middle school</option>

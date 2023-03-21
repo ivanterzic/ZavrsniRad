@@ -1,23 +1,10 @@
 import { loader, scrollDown } from "./Utils";
-
-const { Configuration, OpenAIApi } = require("openai");
-const model = "gpt-3.5-turbo"
-
-const openAIKey = "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"
-const configuration = new Configuration({ apiKey: openAIKey, });
-const openai = new OpenAIApi(configuration);
+import backend from "../backendAPI";
 
 export async function sendCompletionRequest(chatData) {
-    const response = await openai.createChatCompletion({
-      model: model,
-      messages: chatData,
-      temperature : 0.8, //2 je too much, daje prerandom odgovore, 0.8 je okej
-      //top_p : 1,
-      //max_tokens : , 
-      presence_penalty : 1.3,
-      //frequency_penalty : 1
-    })
-    return response
+  
+  let response = await backend.post("/chatcompletion", chatData)
+  return response;
 };
 
 export async function sendInitial(chatData, setChatData, prompt, setDisabled, setStatus) {
@@ -70,16 +57,27 @@ export async function sendPrompt(chatData, setChatData, userTextInput, setUserTe
   } catch(e){console.log(e)}
   
   try{scrollDown(document.getElementById("chat-body"))} catch (e) {console.log("No div to scroll down on")}
-  
-  let response = await sendCompletionRequest(chatData)
+  let response
+  try {
+    response = await sendCompletionRequest(chatData)
+    console.log(response)
+  } catch (e) {
+    try{
+      div.remove()
+    } catch (e) {console.log(e)}
+    setDisabled(false)
+    alert("An error has occured while reaching OpenAI API")
+    return
+  } 
+  console.log(response)
   /*const response = await openai.createChatCompletion({model: "gpt-3.5-turbo", messages: chatData});*/
 
-  console.log(response.data.choices[0].message);
-  await setChatData([...chatData, {"role" : "assistant", "content" : response.data.choices[0].message.content}])
+  console.log(response.data);
+  await setChatData([...chatData, {"role" : "assistant", "content" : response.data.content}])
   setDisabled(false)
   try{
       div.remove()
   } catch (e) {console.log(e)}
   console.log(chatData)  
-    return response.data.choices[0].message.content
+    return response.data.content
   }

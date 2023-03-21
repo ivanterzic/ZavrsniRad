@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useSpeechSynthesis } from 'react-speech-kit';
 import PersonaContext from '../../Context/PersonaContext';
+import backend from '../../backendAPI';
 
- 
 function TextToSpeech(props) {
     
     const {persona} = useContext(PersonaContext)
@@ -10,25 +10,32 @@ function TextToSpeech(props) {
     const { speak, cancel, speaking, supported, voices } = useSpeechSynthesis();
     const [personaObj, setPersonaObj] = useState();
 
+    async function getAudio(){
+        let text = props.data
+        if (text.trim() != ""){
+            const request = {
+                "voice": personaObj.voice,
+                "content": [text],
+                /*"title": string, // Optional
+                "speed": string, // Optional
+                "preset": string // Optional*/
+            };
+            let response = await backend.post("/getvoice", request)
+            var a = new Audio(response.data)
+            a.play()
+        }    
+    }
+
     useEffect(()=>{
-        if (persona)
+        if (persona) 
         setPersonaObj(JSON.parse(persona))
     }, [persona])
 
-    useEffect( ()=> {
+    useEffect( () => {
+        getAudio()
         
-        let text = props.data
-        
-        /*let rate= persona.rate
-        let pitch = persona.pitch*/
-        console.log("Speak")
-        speak({text : text})
-        
-    }  
-    , [props.data])
-
-    console.log(props.data)
-
+    }, [props.data])
+    
     return (
         <div className='container-fluid d-flex flex-row align-items-center justify-content-center'>
             {personaObj ? 
