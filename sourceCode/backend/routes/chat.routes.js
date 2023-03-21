@@ -19,6 +19,10 @@ router.post("/", async (req, res) => {
         presence_penalty : 1.3,
         //frequency_penalty : 1
         })
+    if(response.status == 429){
+        res.status(429)
+        res.send()
+    }
     res.send(response.data.choices[0].message);
 });
 

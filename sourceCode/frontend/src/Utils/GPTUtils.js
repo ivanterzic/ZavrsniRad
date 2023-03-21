@@ -61,8 +61,16 @@ export async function sendPrompt(chatData, setChatData, userTextInput, setUserTe
   try {
     response = await sendCompletionRequest(chatData)
     console.log(response)
+    if (response.status == 429){
+      try {
+        div.remove()
+      } catch (e) {console.log(e)}
+      setDisabled(false)
+      alert("OpenAI API is overcrowded.")
+      return
+    }
   } catch (e) {
-    try{
+    try {
       div.remove()
     } catch (e) {console.log(e)}
     setDisabled(false)
