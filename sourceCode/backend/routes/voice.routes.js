@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
   let transcriptionId = response.data.transcriptionId
   do {
       response = await voiceRequest.get("https://play.ht/api/v1/articleStatus?transcriptionId=" + transcriptionId )
-      console.log(response.data)
+      //console.log(response.data)
       audio = response.data  
   } while (!audio.converted)
   res.send(response.data.audioUrl)

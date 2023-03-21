@@ -9,7 +9,6 @@ const configuration = new Configuration({ apiKey: OPENAI_API_KEY, });
 const openai = new OpenAIApi(configuration);
 
 router.post("/", async (req, res) => {
-    console.log(req.body)
     chatData = req.body
     const response = await openai.createChatCompletion({
         model: model,
@@ -20,7 +19,6 @@ router.post("/", async (req, res) => {
         presence_penalty : 1.3,
         //frequency_penalty : 1
         })
-    console.log(response.data.choices[0].message)
     res.send(response.data.choices[0].message);
 });
 
