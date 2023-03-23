@@ -8,6 +8,8 @@ import Chatbot from '../Components/Chatbot/Chatbot';
 import Interactive from '../Components/Interactive/Interactive'
 import axios from 'axios';
 
+import toonavatar from 'cartoon-avatar';
+
 function App() {
   const { radio, setRadio } = useContext(RadioContext);
   const { persona, setPersona } = useContext(PersonaContext); //used for storing a selected persona
@@ -17,6 +19,11 @@ function App() {
   async function fillData(){
     try {
       const response = await axios.get("http://localhost:3001/personadata");
+      for (let p of response.data){
+        console.log(p.image)
+        p.image = toonavatar.generate_avatar(p.image);
+        console.log(p.image)
+      }
       setData(response.data);
       setLoaded(true)
     } catch (e) {

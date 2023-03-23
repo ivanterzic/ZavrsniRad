@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useSpeechSynthesis } from 'react-speech-kit';
 import PersonaContext from '../../Context/PersonaContext';
 import backend from '../../backendAPI';
+import './TextToSpeech.css'
 
 function TextToSpeech(props) {
     
@@ -9,7 +10,7 @@ function TextToSpeech(props) {
     const [value, setValue] = useState('');
     const { speak, cancel, speaking, supported, voices } = useSpeechSynthesis();
     const [personaObj, setPersonaObj] = useState();
-    const [emoji, setEmoji] = useState("😐");
+    const [emoji, setEmoji] = useState("2");
     
     let isSpeaking = false
     let speakIdx = 0
@@ -17,15 +18,18 @@ function TextToSpeech(props) {
     let interval
 
     const emojiMap = {
-        "😮": ["o", "e", "1"],
-        "😐": ["b", "p", "m", "2", "7"],
-        "🙂": ["c", "g", "j", "k", "n", "r", "s", "t", "v", "x", "z", "3", "4", "9"],
-        "😲": ["d", "l", "0"],
-        "😯": ["q", "u", "w", "y", "6", "8"],
-        "😀": ["a", "i", "5"]
+        "1": ["a", "e", "1", "8"],
+        "2": ["b", "p", "m", "2", "7"],
+        "3": ["q", "u", "w", "2", "6", " "],
+        "4": ["c", "g", "d", "k", "n", "r", "s", "t", "y", "x", "z", "6", "4", "9"],
+        "5": ["t", "h", "i", "0", "3"],
+        "6": ["l", "6"],
+        "7": ["r", "7"],
+        "8": ["o", "0"],
+        "9": ["f", "b", "5", "4"]
       };
       
-      const defaultEmoji = "😐";
+      const defaultEmoji = "2";
       
       function toEmoji(char){
         return (
@@ -81,7 +85,11 @@ function TextToSpeech(props) {
         <div className='container-fluid d-flex flex-column align-items-center justify-content-center'>
             {personaObj ? 
                 <>
-                    <img src={personaObj.image} alt={personaObj.name} />
+                    <div className = "persona-picture-wrap">
+                        <img className='persona-img' src={personaObj.image} alt={personaObj.name} />
+                        <img className='mouth-img' src = {require("./images/" + emoji + "-removebg-preview.png")} alt="mouth" />
+                    </div>
+                    
                     <div>{emoji}</div>
                 </>
             :

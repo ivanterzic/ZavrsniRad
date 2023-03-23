@@ -1,0 +1,21 @@
+.persona-picture-wrap{
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.persona-img {
+    width: 17vw;
+    aspect-ratio: 1 / 1;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.mouth-img{
+    width: 2.7vw;
+    position: absolute;
+    top: 10vW;
+    left: 7.5vw;
+    /*border: 1px solid;*/
+}
