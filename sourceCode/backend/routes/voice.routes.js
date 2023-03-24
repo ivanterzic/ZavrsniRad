@@ -10,6 +10,7 @@ router.post("/", async (req, res) => {
     "voice": req.body.voice,
     "content": req.body.content,
   }
+  console.log(sendData)
   let response
   try {
     response = await voiceRequest.post("https://play.ht/api/v1/convert", sendData)
@@ -19,6 +20,8 @@ router.post("/", async (req, res) => {
   let audio = {
       "converted" : false
   }
+  console.log(response)
+  console.log(response.data)
   let transcriptionId = response.data.transcriptionId
   do {
       response = await voiceRequest.get("https://play.ht/api/v1/articleStatus?transcriptionId=" + transcriptionId )

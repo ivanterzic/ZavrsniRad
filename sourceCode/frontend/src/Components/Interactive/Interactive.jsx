@@ -38,7 +38,7 @@ function Interactive() {
     return ( 
         <>
             <div id='chat-header'></div>
-            <div className='container-fluid d-flex flex-row align-items-center justify-content-between'>
+            <div className='container-fluid d-flex flex-row align-items-center justify-content-between flew-wrap'>
                 <div className='wrap'><TextToSpeech data = {speakData}></TextToSpeech></div>
                 <div className='container-fluid d-flex flex-column align-items-center justify-content-center flex-wrap'>
                     <div className='p-4 container-fluid d-flex flex-row align-items-center justify-content-center flex-wrap'>

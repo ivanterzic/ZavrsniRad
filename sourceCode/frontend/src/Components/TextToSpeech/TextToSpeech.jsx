@@ -2,7 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useSpeechSynthesis } from 'react-speech-kit';
 import PersonaContext from '../../Context/PersonaContext';
 import backend from '../../backendAPI';
-import './TextToSpeech.css'
+import './TextToSpeech.css';
+var num2words = require("num2words")
 
 function TextToSpeech(props) {
     
@@ -12,25 +13,43 @@ function TextToSpeech(props) {
     const [personaObj, setPersonaObj] = useState();
     const [emoji, setEmoji] = useState("2");
     
+    let animationString = ""
+
     let isSpeaking = false
     let speakIdx = 0
 
     let interval
 
     const emojiMap = {
-        "1": ["a", "e", "1", "8"],
-        "2": ["b", "p", "m", "2", "7"],
-        "3": ["q", "u", "w", "2", "6", " "],
-        "4": ["c", "g", "d", "k", "n", "r", "s", "t", "y", "x", "z", "6", "4", "9"],
-        "5": ["t", "h", "i", "0", "3"],
-        "6": ["l", "6"],
-        "7": ["r", "7"],
-        "8": ["o", "0"],
-        "9": ["f", "b", "5", "4"]
+        "1": ["a", "e"],
+        "2": ["b", "p", "m"],
+        "3": ["q", "u", "w", " "],
+        "4": ["c", "g", "d", "k", "n", "r", "s", "t", "y", "x", "z"],
+        "5": ["t", "h", "i"],
+        "6": ["l"],
+        "7": ["r"],
+        "8": ["o"],
+        "9": ["f", "b"]
       };
       
       const defaultEmoji = "2";
       
+      function convertString(string){
+        let output = ""
+        for (let word of string.split(" ")){
+            word = word.replace(".", "")
+            word = word.replace(",", "")
+            console.log(word)
+            if (/^\d+$/.test(word)){
+                output += num2words(word)
+            }
+            else {
+                output += word + " "
+            }
+        }
+        return output
+      }
+
       function toEmoji(char){
         return (
           Object.keys(emojiMap).find(emoji =>
@@ -39,8 +58,8 @@ function TextToSpeech(props) {
 
     function handleAnimation(){
         if (isSpeaking){
-            setEmoji(toEmoji(props.data.charAt(speakIdx)))
-            if (speakIdx < props.data.length - 1) {
+            setEmoji(toEmoji(animationString.charAt(speakIdx)))
+            if (speakIdx < animationString.length - 1) {
                 speakIdx++
             }
         }
@@ -77,6 +96,8 @@ function TextToSpeech(props) {
 
     useEffect(  () => {
         if (props.data.trim() != ""){
+            animationString = convertString(props.data)
+            console.log(animationString)
             getAudio()
         }
     }, [props.data])
