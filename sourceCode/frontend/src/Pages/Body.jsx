@@ -21,8 +21,11 @@ function App() {
       const response = await axios.get("http://localhost:3001/personadata");
       for (let p of response.data){
         console.log(p.image)
-        p.image = toonavatar.generate_avatar(p.image);
-        console.log(p.image)
+        p.imageurl = toonavatar.generate_avatar(
+          {"gender": p.gender, 
+            "id": p.imageid ? p.imageid : null
+        });
+        console.log(p.imageurl)
       }
       setData(response.data);
       setLoaded(true)

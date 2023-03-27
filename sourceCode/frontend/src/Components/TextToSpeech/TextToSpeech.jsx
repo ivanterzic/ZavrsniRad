@@ -1,17 +1,17 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useSpeechSynthesis } from 'react-speech-kit';
 import PersonaContext from '../../Context/PersonaContext';
 import backend from '../../backendAPI';
 import './TextToSpeech.css';
-var num2words = require("num2words")
+import { mouthMap, handleAnimation, convertString, toMouth } from '../../Utils/Text2SpeechUtils';
+
 
 function TextToSpeech(props) {
     
     const {persona} = useContext(PersonaContext)
     const [value, setValue] = useState('');
-    const { speak, cancel, speaking, supported, voices } = useSpeechSynthesis();
+    //const { speak, cancel, speaking, supported, voices } = useSpeechSynthesis();
     const [personaObj, setPersonaObj] = useState();
-    const [emoji, setEmoji] = useState("2");
+    const [mouth, setMouth] = useState("2");
     
     let animationString = ""
 
@@ -20,45 +20,12 @@ function TextToSpeech(props) {
 
     let interval
 
-    const emojiMap = {
-        "1": ["a", "e"],
-        "2": ["b", "p", "m"],
-        "3": ["q", "u", "w", " "],
-        "4": ["c", "g", "d", "k", "n", "r", "s", "t", "y", "x", "z"],
-        "5": ["t", "h", "i"],
-        "6": ["l"],
-        "7": ["r"],
-        "8": ["o"],
-        "9": ["f", "b"]
-      };
-      
-      const defaultEmoji = "2";
-      
-      function convertString(string){
-        let output = ""
-        for (let word of string.split(" ")){
-            word = word.replace(".", "")
-            word = word.replace(",", "")
-            console.log(word)
-            if (/^\d+$/.test(word)){
-                output += num2words(word)
-            }
-            else {
-                output += word + " "
-            }
-        }
-        return output
-      }
-
-      function toEmoji(char){
-        return (
-          Object.keys(emojiMap).find(emoji =>
-            emojiMap[emoji].includes(char.toLowerCase())
-        ) || defaultEmoji)}
-
+    let defaultMouth = "2";
+    
     function handleAnimation(){
         if (isSpeaking){
-            setEmoji(toEmoji(animationString.charAt(speakIdx)))
+            let res = toMouth(animationString.charAt(speakIdx))
+            setMouth(res ? res : defaultMouth)
             if (speakIdx < animationString.length - 1) {
                 speakIdx++
             }
@@ -80,7 +47,7 @@ function TextToSpeech(props) {
             clearInterval(interval);
             isSpeaking = false
             speakIdx = 0
-            setEmoji(defaultEmoji)
+            setMouth(defaultMouth)
         }
         
         await a.play()   
@@ -90,8 +57,12 @@ function TextToSpeech(props) {
     }
 
     useEffect(()=>{
-        if (persona) 
-        setPersonaObj(JSON.parse(persona))
+        if (persona) {
+            setPersonaObj(JSON.parse(persona))
+            console.log(JSON.parse(persona).gender)
+            JSON.parse(persona).gender == "female" ? defaultMouth = "10" : defaultMouth = "2"
+            setMouth(defaultMouth)
+        }
     }, [persona])
 
     useEffect(  () => {
@@ -107,11 +78,9 @@ function TextToSpeech(props) {
             {personaObj ? 
                 <>
                     <div className = "persona-picture-wrap">
-                        <img className='persona-img' src={personaObj.image} alt={personaObj.name} />
-                        <img className='mouth-img' src = {require("./images/" + emoji + "-removebg-preview.png")} alt="mouth" />
+                        <img className='persona-img' src={personaObj.imageurl} alt={personaObj.name} />
+                        <img className={personaObj.gender == "male" ? "mouth-img" : "fem-mouth-img"} src = {require("./images/" + mouth + "-removebg-preview.png")} />
                     </div>
-                    
-                    <div>{emoji}</div>
                 </>
             :
                 <img src="https://upload.wikimedia.org/wikipedia/commons/d/d8/Person_icon_BLACK-01.svg" alt="Waiting"/>
