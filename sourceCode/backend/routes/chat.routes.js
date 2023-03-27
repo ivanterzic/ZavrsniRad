@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
     const response = await openai.createChatCompletion({
         model: model,
         messages: chatData,
-        temperature : 0.8, //2 je too much, daje prerandom odgovore, 0.8 je okej
+        temperature : 1, //2 je too much, daje prerandom odgovore, 0.8 je okej
         //top_p : 1,
         //max_tokens : , 
         presence_penalty : 1.3,

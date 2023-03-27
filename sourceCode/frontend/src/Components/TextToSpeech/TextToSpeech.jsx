@@ -59,7 +59,7 @@ function TextToSpeech(props) {
     useEffect(()=>{
         if (persona) {
             setPersonaObj(JSON.parse(persona))
-            console.log(JSON.parse(persona).gender)
+            console.log(JSON.parse(persona).gender) 
             JSON.parse(persona).gender == "female" ? defaultMouth = "10" : defaultMouth = "2"
             setMouth(defaultMouth)
         }

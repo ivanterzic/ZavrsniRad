@@ -13,9 +13,10 @@
 }
 
 .mouth-img{
+    transform: scale(0.7);
     width: 2.7vw;
     position: absolute;
-    top: 10vW;
+    top: 10.3vW;
     left: 7.5vw;
     /*border: 1px solid;*/
 }

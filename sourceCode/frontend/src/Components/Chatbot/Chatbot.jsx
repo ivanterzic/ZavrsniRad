@@ -24,7 +24,7 @@ function Chatbot() {
 
   useEffect(() => { 
     if (personaObj && chatData.length == 0)
-      sendInitial(chatData, setChatData, personaObj.initialPrompt, setDisabled, setStatus );
+      sendInitial(chatData, setChatData, personaObj.initialPrompt + " The questions will be provided by the user in the following messages.", setDisabled, setStatus );
   }, [personaObj]);
 
   useEffect(() => { 

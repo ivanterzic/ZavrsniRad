@@ -9,8 +9,10 @@ import Interactive from '../Components/Interactive/Interactive'
 import axios from 'axios';
 
 import toonavatar from 'cartoon-avatar';
+import Conversation from '../Components/Conversation/Conversation';
 
 function App() {
+  
   const { radio, setRadio } = useContext(RadioContext);
   const { persona, setPersona } = useContext(PersonaContext); //used for storing a selected persona
   const [data, setData] = useState([]); //used for an array of specific persona a user is able to select
@@ -47,10 +49,9 @@ function App() {
         <SelectOption data = {data}></SelectOption>
         {loaded === false ? <h5 className="d-flex flex-row allign-items-center justify-content-center">Unable to reach server, no persona loaded!</h5> : null}
         <div>
-          {radio === "Text" ? 
-            <Chatbot></Chatbot>
-            :
-            <Interactive></Interactive>
+          {radio === "Text" ? <Chatbot></Chatbot> :
+            radio === "Interactive" ? <Interactive></Interactive>:
+            <Conversation data = {data}></Conversation>
           }
         </div>
         </header>
