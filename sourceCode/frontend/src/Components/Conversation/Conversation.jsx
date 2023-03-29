@@ -4,6 +4,7 @@ import './Conversation.css';
 
 import { scrollDown, generateUniqueId, loader } from '../../Utils/Utils';
 import { sendTwoPersonaPrompt } from '../../Utils/GPTUtils';
+import ProfileAvatar from '../ProfileAvatar/ProfileAvatar';
 
 //DODATI TYPING ZA P1 i P2, promjenu teme
 
@@ -19,7 +20,7 @@ function Conversation(props) {
   const [persona1Data, setPersona1Data] = useState([])
   const [persona2Data, setPersona2Data] = useState([])
 
-  const [topic, setTopic] = useState("Physics")
+  const [topic, setTopic] = useState("")
   const [conversationHappening, setConversationHappening] = useState(false)
   const [conversationStarted, setConversationStarted] = useState(false)
   const [newMessage, setNewMessage] = useState()
@@ -38,7 +39,6 @@ function Conversation(props) {
   async function continueConversation(){ 
     if(conversationHappening == true){
         if (turn == 2){
-            console.log("")
             pendingText = await sendTwoPersonaPrompt(persona2Data, newMessage, setPersona2Data)
             chatData.push({"role" : "p2", "content" : pendingText})
             setTurn(1)
@@ -73,6 +73,7 @@ function Conversation(props) {
   return (
     <>
         <div className='container-fluid d-flex flex-row align-items-center justify-content-center'>
+        
             <div className='d-flex flex-row flex-wrap align-items-center justify-content-around'>
                 <select id = "persona1-select" name = "persona" className="selectpicker p-2" onChange={(e)=>{
                     setPersona1(JSON.parse(e.target.value))
@@ -105,9 +106,15 @@ function Conversation(props) {
                     </optgroup>
                 </select>  
             </div>
+            <input value={topic} class="form-control form-control-sm w-25" type="text" placeholder="Pick a topic" disabled = {conversationHappening} onChange = {(e) => {
+                setTopic(e.target.value)
+            }}></input>
             <button type="button" className="btn btn-success" onClick={async (e) => {
                 if (persona1 == undefined || !persona2){
                     alert("Please select both personas!")
+                }
+                else if (!topic || topic === ""){
+                    alert("Please choose a topic!")
                 }
                 else if (persona1 === persona2) alert("Please select different personas!")
                 else {
@@ -123,32 +130,58 @@ function Conversation(props) {
                                 "content" : "OK"
                             }])
 
-                        pendingText = await sendTwoPersonaPrompt(persona1Data, persona1.initialPrompt + ` The user is in this case ${persona2.name}. Start discussion about ${topic} with user. Talk only as ${persona1.name}! Write short to medium sized messages.`, setPersona1Data)
+                        pendingText = await sendTwoPersonaPrompt(persona1Data, persona1.initialPrompt + ` The user is in this case ${persona2.name}. The topic of the conversation is ${topic}, initiate a conversation with a short message. Talk from the perspective of ${persona1.name}!`, setPersona1Data)
                         await setChatData([{"role" : "p1", "content" : pendingText}])
                         setNewMessage(pendingText)
+                        setConversationStarted(true)
                         setConversationHappening(true)
                     }
                     else {
                         console.log("Action was cancelled. No persona change has occured.")
                     }
                 }
-                
             }}>Submit</button>
-        <button onClick={(e) => {
-            setConversationHappening(!conversationHappening)
-        }}>{conversationHappening.toString()}</button>
+            <button disabled={!conversationStarted || (conversationStarted && conversationHappening)} type="button" className="btn btn-success" onClick={e => {
+                setNewMessage(`I would like to talk about ${topic}, ask me a question about ${topic}!`)
+                chatData.push({"role" : "p" + turn, "content" : `I would like to talk about ${topic}, can you ask me a question about ${topic}?`})
+                turn === 1 ? setTurn(2) : setTurn(1)
+                alert("New conversation topic set! " + topic)
+            }}>Change topic</button>
         </div>
+        <div className='container-fluid d-flex flex-row align-items-center justify-content-center'>
+            <button disabled = {!conversationStarted} onClick={(e) => {
+                setConversationHappening(!conversationHappening)
+            }}>{conversationHappening ? "⏸" : "▶️"}</button>
+        </div>
+            
+
         <div className='container-fluid d-flex flex-column align-items-center justify-content-center'>
             <div className='chat-wrapper'>
                 <div  id = "chat-header" className='border-bottom chat-header d-flex flex-row justify-content-between'>
-                    <div>{/*!personaObj ? "No persona selected!" : personaObj.name*/}</div>
+                    <div>{persona1 ? 
+                        <div className='container-fluid d-flex flex-row align-items-center justify-content-center'>
+                            <ProfileAvatar image = {persona1.imageurl}></ProfileAvatar>
+                            <div className='m-3'>
+                                <span>{persona1.name}</span> 
+                            </div>
+                        </div>
+                        : null}
+                    </div>
+                    <div>{persona2 ? 
+                        <div className='container-fluid d-flex flex-row align-items-center justify-content-center'>
+                            <div className='m-3'>
+                                <span>{persona2.name}</span> 
+                            </div>
+                            <ProfileAvatar image = {persona2.imageurl}></ProfileAvatar>
+                        </div> 
+                        : null}
+                    </div>
                 </div>
                 <div id = "chat-body" className='chat-body overflow-auto d-flex flex-column'>
                 {chatData.map( (d) => {
                     console.log(d)
                     let r = d.role.toString()
                     let c = d.content.toString()
-                    //console.log(chatData)
                     return r === "p1" ? 
                         (<div className='d-flex flex-row' key = {generateUniqueId()}>
                         <div className='bg-success text-light mt-1 chat-message p1-chat-message'>{c}</div>
