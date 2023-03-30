@@ -5,6 +5,7 @@ import PersonaContext from '../../Context/PersonaContext';
 import ChatDataContext from '../../Context/ChatDataContext';
 import DisabledContext from '../../Context/DisabledContext'
 import UserTextInputContext from '../../Context/UserInputContext';
+import ProfileAvatar from '../ProfileAvatar/ProfileAvatar';
 import { scrollDown, generateUniqueId, loader } from '../../Utils/Utils';
 import { sendPrompt, sendInitial } from '../../Utils/GPTUtils';
 
@@ -39,7 +40,14 @@ function Chatbot() {
     <div className='container-fluid d-flex flex-column align-items-center justify-content-center'>
       <div className='chat-wrapper'>
         <div  id = "chat-header" className='border-bottom chat-header d-flex flex-row justify-content-between'>
-            <div>{!personaObj ? "No persona selected!" : personaObj.name}</div>
+            <div>{!personaObj ? "No persona selected!" :  
+              <div className='container-fluid d-flex flex-row align-items-center justify-content-center'>
+                  <ProfileAvatar image = {personaObj.imageurl}></ProfileAvatar>
+                  <div className='m-3'>
+                      <span>{personaObj.name}</span> 
+                  </div>
+              </div>
+            }</div>
         </div>
         <div id = "chat-body" className='chat-body overflow-auto d-flex flex-column'>
           {chatData.slice(2).map( (d) => {
