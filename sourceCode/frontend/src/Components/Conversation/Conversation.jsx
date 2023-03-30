@@ -7,51 +7,54 @@ import ProfileAvatar from '../ProfileAvatar/ProfileAvatar';
 
 function Conversation(props) {
   
-  const [chatData, setChatData] = useState([])
+    const [chatData, setChatData] = useState([])
 
-  const [status, setStatus] = useState("No")
+    const [status, setStatus] = useState("No")
 
-  const [persona1, setPersona1] = useState(undefined)
-  const [persona2, setPersona2] = useState(undefined)
+    const [persona1, setPersona1] = useState(undefined)
+    const [persona2, setPersona2] = useState(undefined)
 
-  const [persona1Data, setPersona1Data] = useState([])
-  const [persona2Data, setPersona2Data] = useState([])
+    const [persona1Data, setPersona1Data] = useState([])
+    const [persona2Data, setPersona2Data] = useState([])
 
-  const [topic, setTopic] = useState("")
-  const [conversationHappening, setConversationHappening] = useState(false)
-  const [conversationStarted, setConversationStarted] = useState(false)
-  const [newMessage, setNewMessage] = useState()
-  const [turn, setTurn] = useState(2)
-  const [awaitingMessage, setAwaitingMessage] = useState(false)
+    const [topic, setTopic] = useState("")
+
+    const [conversationHappening, setConversationHappening] = useState(false)
+    const [conversationStarted, setConversationStarted] = useState(false)
+
+    const [newMessage, setNewMessage] = useState()
+    const [turn, setTurn] = useState(2)
+    
+    const [awaitingMessage, setAwaitingMessage] = useState(false)
 
     let pendingText = "";
 
     async function continueConversation(){ 
-    if(conversationHappening === true){
-        await setTimeout(() => {}, 500)
-        setAwaitingMessage(true)
-        if (turn === 2){
-            let div = document.createElement("div")
-            document.getElementById("p2-typing").appendChild(div)
-            loader(div)
-            pendingText = await sendTwoPersonaPrompt(persona2Data, newMessage, setPersona2Data)
-            chatData.push({"role" : "p2", "content" : pendingText})
-            setTurn(1)
-            setNewMessage(pendingText)  
-            div.remove()
+        if(conversationHappening === true){
+            await setTimeout(() => {}, 500)
+            setAwaitingMessage(true)
+            if (turn === 2){
+                let div = document.createElement("div")
+                document.getElementById("p2-typing").appendChild(div)
+                loader(div)
+                pendingText = await sendTwoPersonaPrompt(persona2Data, newMessage, setPersona2Data)
+                chatData.push({"role" : "p2", "content" : pendingText})
+                setTurn(1)
+                setNewMessage(pendingText)  
+                div.remove()
+            }
+            else if (turn === 1) {
+                let div = document.createElement("div")
+                document.getElementById("p1-typing").appendChild(div)
+                loader(div)
+                pendingText = await sendTwoPersonaPrompt(persona1Data, newMessage, setPersona1Data)
+                chatData.push({"role" : "p1", "content" : pendingText})
+                setTurn(2)
+                setNewMessage(pendingText)
+                div.remove()
+            }
+            setAwaitingMessage(false)
         }
-        else if (turn === 1) {
-            let div = document.createElement("div")
-            document.getElementById("p1-typing").appendChild(div)
-            loader(div)
-            pendingText = await sendTwoPersonaPrompt(persona1Data, newMessage, setPersona1Data)
-            chatData.push({"role" : "p1", "content" : pendingText})
-            setTurn(2)
-            setNewMessage(pendingText)
-            div.remove()
-        }
-        setAwaitingMessage(false)
-    }
     }
 
     async function startConversation(e){
@@ -78,7 +81,7 @@ function Conversation(props) {
             let div = document.createElement("div")
             document.getElementById("p1-typing").appendChild(div)
             loader(div)
-            pendingText = await sendTwoPersonaPrompt(persona1Data, persona1.initialPrompt + ` The user is in this case ${persona2.name}. The topic of the conversation is ${topic}, initiate a conversation with a short message. Talk from the perspective of ${persona1.name}!`, setPersona1Data)
+            pendingText = await sendTwoPersonaPrompt(persona1Data, persona1.initialPrompt + ` The user is in this case ${persona2.name}. The topic of the conversation is ${topic}, initiate a conversation with a short message! Talk from the perspective of ${persona1.name}!`, setPersona1Data)
             setChatData([{"role" : "p1", "content" : pendingText}])
             div.remove()
             setNewMessage(pendingText)
@@ -113,30 +116,34 @@ function Conversation(props) {
         <div className='container-fluid d-flex flex-row align-items-center justify-content-center'>
             <div className='d-flex flex-row flex-wrap align-items-center justify-content-around'>
                 <select id = "persona1-select" name = "persona" className="selectpicker p-2" disabled = {conversationHappening} onChange={(e)=>{
-                    setPersona1(JSON.parse(e.target.value))
-                }}>
-                    <optgroup label="?">
-                        <option selected hidden value={undefined}>Select a persona...</option>
-                        { 
-                            props.data.map((p) => {    
-                                return (<option key = {p.name} value = {JSON.stringify(p)}>{p.name}</option>)
-                            })
-                        }
-                    </optgroup>
+                    setPersona1(JSON.parse(e.target.value))}}>
+                    <option selected hidden value={undefined}>Select a persona...</option>
+                    {props.categories.map((c) => {
+                        return(
+                            <optgroup label={c.name}>
+                                {props.data.map((p) => {
+                                    if (p.category === c.id)
+                                        return (<option key = {p.name} value = {JSON.stringify(p)}>{p.name}</option>)
+                                })
+                                }
+                            </optgroup>)
+                    })}   
                 </select>  
             </div>
             <div className='d-flex flex-row flex-wrap align-items-center justify-content-around'>
                 <select id = "persona2-select" name = "persona" className="selectpicker p-2" disabled = {conversationHappening} onChange={(e)=>{
-                    setPersona2(JSON.parse(e.target.value))
-                }}/*size={3}*/>
-                    <optgroup label="?">
-                        <option selected hidden value={undefined}>Select a persona...</option>
-                        { 
-                            props.data.map((p) => {
-                                return (<option key = {p.name} value = {JSON.stringify(p)}>{p.name}</option>)
-                            })
-                        }
-                    </optgroup>
+                    setPersona2(JSON.parse(e.target.value))}}>
+                    <option selected hidden value={undefined}>Select a persona...</option>
+                    {props.categories.map((c) => {
+                        return(
+                            <optgroup label={c.name}>
+                                {props.data.map((p) => {
+                                    if (p.category === c.id)
+                                        return (<option key = {p.name} value = {JSON.stringify(p)}>{p.name}</option>)
+                                })
+                                }
+                            </optgroup>)
+                    })}  
                 </select>  
             </div>
             <input value={topic} class="form-control form-control-sm w-25" type="text" placeholder="Pick a topic" disabled = {conversationHappening} onChange = {(e) => {

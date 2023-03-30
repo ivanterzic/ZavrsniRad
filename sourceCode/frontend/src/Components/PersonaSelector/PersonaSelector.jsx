@@ -8,21 +8,25 @@ function PersonaSelector(props) {
     const {persona, setPersona} = useContext(PersonaContext)
     const {chatData, setChatData} = useContext(ChatDataContext)
     const [value, setValue] = useState();
-    const data = props.data
-
+ 
+    console.log(props.categories)
     return (
         <div className='d-flex flex-row flex-wrap align-items-center justify-content-around'>
             <select id = "persona-select" name = "persona" className="selectpicker p-2" onChange={(e)=>{
                 setValue(e.target.value)
                 console.log("Persona value changed!")
-            }}/*size={3}*/>
-                <optgroup label="?">
-                    { 
-                        props.data.map( ( p) => {
-                            return (<option key = {p.name} value = {JSON.stringify(p)}>{p.name}</option>)
-                        })
-                    }
-                </optgroup>
+            }}>
+                {props.categories.map((c) => {
+                    return(
+                        <optgroup label={c.name}>
+                            {props.data.map((p) => {
+                                if (p.category === c.id)
+                                    return (<option key = {p.name} value = {JSON.stringify(p)}>{p.name}</option>)
+                            })
+                            }
+                        </optgroup>)
+                })}
+                   
             </select>
             <button type="button" className="btn btn-success" onClick={(e) => {
                 let val = document.getElementById("persona-select").value

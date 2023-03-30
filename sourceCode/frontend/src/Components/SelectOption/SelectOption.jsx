@@ -4,7 +4,6 @@ import './SelectOption.css'
 import RadioButton from '../RadioButton/RadioButton'
 import PersonaSelector from '../PersonaSelector/PersonaSelector'
 import RadioContext from '../../Context/RadioContext';
-//{justify-content-around}
 function SelectOption(props) {
     
     const { radio, setRadio } = useContext(RadioContext);
@@ -15,7 +14,7 @@ function SelectOption(props) {
             <div className="container-fluid d-flex flex-row align-items-center justify-content-center flex-wrap">
                 <h4>Select a persona:</h4>
                 <div className="p-3">
-                        <PersonaSelector data = {props.data}></PersonaSelector>
+                        <PersonaSelector data = {props.data} categories = {props.categories}></PersonaSelector>
                 </div>
             </div> : null }
             <div className='container-fluid d-flex flex-row align-items-center justify-content-center flex-wrap'> 

@@ -11,6 +11,7 @@ const PORT = 3001;
 const personaRouter = require('./routes/persona.routes')
 const voiceRouter = require('./routes/voice.routes')
 const chatRouter = require('./routes/chat.routes')
+const categoriesRouter = require('./routes/categories.routes')
 
 app.options('/', cors)
 app.use(express.urlencoded({ extended: true }));
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
 app.use('/personadata', personaRouter);
 app.use('/getvoice', voiceRouter);
 app.use('/chatcompletion', chatRouter);
+app.use('/categories', categoriesRouter);
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
