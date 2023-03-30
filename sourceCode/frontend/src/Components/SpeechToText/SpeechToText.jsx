@@ -13,6 +13,7 @@ function SpeechToText(props) {
   const {chatData, setChatData} = useContext(ChatDataContext)
   const {disabled, setDisabled} = useContext(DisabledContext)
   const {userTextInput, setUserTextInput} = useContext(UserTextInputContext)
+
   
   const { listen, listening, stop } = useSpeechRecognition({
     onResult: (result) => {
