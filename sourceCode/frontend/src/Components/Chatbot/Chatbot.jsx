@@ -36,6 +36,8 @@ function Chatbot() {
     !personaObj || status === "Pending" ? setDisabled(true) : setDisabled(false)
   }, [status, personaObj])
 
+console.log(chatData)
+
   return (
     <div className='container-fluid d-flex flex-column align-items-center justify-content-center'>
       <div className='chat-wrapper'>
