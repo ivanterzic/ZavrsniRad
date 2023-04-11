@@ -5,6 +5,7 @@ import './index.css';
 import Body from './Pages/Body';
 import Login from './Pages/Login';
 import Modify from './Pages/Modify';
+import Create from './Pages/Create'
 import App from './App';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
@@ -30,6 +31,7 @@ root.render(
                     <Route path="/" element={<Body />} />
                     <Route path ="login" element={<Login />} />
                     <Route path="modify" element={<Modify />} />
+                    <Route path="create" element={<Create />} />
                     <Route path="*" element={<NoPage />}>
                   </Route>
                 </Routes>

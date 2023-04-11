@@ -5,6 +5,19 @@ const {API_KEY} = require('../data/voice_api_key.js')
 const {USER} = require('../data/voice_user.js')
 const voiceRequest = require('../utils/axiosVoice')
 
+router.get("/voices", async (req, res) => {
+  try {
+    response = await voiceRequest.get("https://play.ht/api/v1/getVoices")
+    let returnArray = response.data.voices.filter((v) => 
+      v.voiceType === "Standard"
+    )
+    res.send(returnArray)
+  } 
+  catch {
+    res.statusCode(404)
+  }
+})
+
 router.post("/", async (req, res) => { 
   const sendData = {
     "voice": req.body.voice,

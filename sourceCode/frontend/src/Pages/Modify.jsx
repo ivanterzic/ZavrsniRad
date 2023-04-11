@@ -30,7 +30,8 @@ function App() {
         <div className='container-fluid d-flex flex-row align-items-center justify-content-around p-1'>
           <label htmlFor='mention'>School Level</label>
           <select name = "mention" className="form-select w-50">
-            <option selected value={false}>Elementary school</option>
+            <option selected value={false} 
+            style={{backgroundImage:`url(https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.tripadvisor.com%2FHotel_Review-g4283430-d19882363-Reviews-Omahe_Qoema_3_Syariah_Guest_House-Sewon_Yogyakarta_Region_Java.html&psig=AOvVaw3KzE5YXW54L6xYKGHmwruZ&ust=1681242702127000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCLiEqaKLoP4CFQAAAAAdAAAAABAE)`}}>Elementary</option>
             <option value={true}>Middle school</option>
             <option value={true}>College</option>
           </select>

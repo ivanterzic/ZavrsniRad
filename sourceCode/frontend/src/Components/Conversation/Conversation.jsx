@@ -58,41 +58,41 @@ function Conversation(props) {
     }
 
     async function startConversation(e){
-    if (persona1 === undefined || !persona2){
-        alert("Please select both personas!")
-    }
-    else if (!topic || topic === ""){
-        alert("Please choose a topic!")
-    }
-    else if (persona1 === persona2) alert("Please select different personas!")
-    else {
-        let resp = window.confirm("Are you sure you want to select these two persona: " + persona1.name + " and " + persona2.name +"? Current chat data will be deleted! ")
-        if (resp){
-            setChatData([])
-            setPersona2Data([
-                {
-                    "role" : "user", 
-                  "content" : persona2.initialPrompt + ` The user is in this case ${persona1.name}. The topic of the conversation is ${topic}. ${persona2.name} will initiate the conversation.`
-                }, {
-                    "role" : "assistant", 
-                    "content" : "OK"
-                }])
-            setAwaitingMessage(true)
-            let div = document.createElement("div")
-            document.getElementById("p1-typing").appendChild(div)
-            loader(div)
-            pendingText = await sendTwoPersonaPrompt(persona1Data, persona1.initialPrompt + ` The user is in this case ${persona2.name}. The topic of the conversation is ${topic}, initiate a conversation with a short message! Talk from the perspective of ${persona1.name}!`, setPersona1Data)
-            setChatData([{"role" : "p1", "content" : pendingText}])
-            div.remove()
-            setNewMessage(pendingText)
-            setConversationHappening(true)
-            setConversationStarted(true)
-            setAwaitingMessage(false)
+        if (persona1 === undefined || !persona2){
+            alert("Please select both personas!")
         }
+        else if (!topic || topic === ""){
+            alert("Please choose a topic!")
+        }
+        else if (persona1 === persona2) alert("Please select different personas!")
         else {
-            console.log("Action was cancelled. No persona change has occured.")
+            let resp = window.confirm("Are you sure you want to select these two persona: " + persona1.name + " and " + persona2.name +"? Current chat data will be deleted! ")
+            if (resp){
+                setChatData([])
+                setPersona2Data([
+                    {
+                        "role" : "user", 
+                    "content" : persona2.initialPrompt + ` The user is in this case ${persona1.name}. The topic of the conversation is ${topic}. ${persona2.name} will initiate the conversation.`
+                    }, {
+                        "role" : "assistant", 
+                        "content" : "OK"
+                    }])
+                setAwaitingMessage(true)
+                let div = document.createElement("div")
+                document.getElementById("p1-typing").appendChild(div)
+                loader(div)
+                pendingText = await sendTwoPersonaPrompt(persona1Data, persona1.initialPrompt + ` The user is in this case ${persona2.name}. The topic of the conversation is ${topic}, initiate a conversation with a short message! DO NOT GENERATE THE WHOLE CONVERSATION!!!`, setPersona1Data)
+                setChatData([{"role" : "p1", "content" : pendingText}])
+                div.remove()
+                setNewMessage(pendingText)
+                setConversationHappening(true)
+                setConversationStarted(true)
+                setAwaitingMessage(false)
+            }
+            else {
+                console.log("Action was cancelled. No persona change has occured.")
+            }
         }
-    }
     }
 
     async function changeTopic(e){

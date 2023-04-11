@@ -11,8 +11,8 @@ function Header() {
         
         <div className="d-flex flex-row allign-items-center justify-content-around w-25">
           <div><a href='login'>Login</a></div>
-
           <div><a href='modify'>Modify</a></div>
+          <div><a href='create'>Create</a></div>
         </div>
         
       </nav>

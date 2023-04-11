@@ -1,4 +1,4 @@
-const categories = [{
+let categories = [{
     "id" : 1,
     "name" : "Sport"
   }, 
@@ -9,7 +9,11 @@ const categories = [{
   {
     "id" : 3,
     "name" : "Way of thinking"
-  }  
+  }  ,
+  {
+    "id" : 3,
+    "name" : "Fictional"
+  }
 ]
 
 module.exports = categories

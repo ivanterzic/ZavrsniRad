@@ -12,6 +12,7 @@ const personaRouter = require('./routes/persona.routes')
 const voiceRouter = require('./routes/voice.routes')
 const chatRouter = require('./routes/chat.routes')
 const categoriesRouter = require('./routes/categories.routes')
+const createRouter = require('./routes/create.routes')
 
 app.options('/', cors)
 app.use(express.urlencoded({ extended: true }));
@@ -29,13 +30,14 @@ app.use((req, res, next) => {
   next();
 });
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Methods', "GET, PUT, OPTIONS");
+  res.header('Access-Control-Allow-Methods', "GET, PUT, OPTIONS, POST");
   next();
 });
 app.use('/personadata', personaRouter);
 app.use('/getvoice', voiceRouter);
 app.use('/chatcompletion', chatRouter);
 app.use('/categories', categoriesRouter);
+app.use('/create', createRouter);
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
