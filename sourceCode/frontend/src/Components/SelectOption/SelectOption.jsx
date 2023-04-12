@@ -35,10 +35,7 @@ function SelectOption(props) {
                     }
                     
                 }}>Reset</button>
-            </>
-            
-            : null 
-            
+            </> : null         
             }
             <div className='container-fluid d-flex flex-row align-items-center justify-content-center flex-wrap'> 
                 <h4>Select a chat option:</h4>
