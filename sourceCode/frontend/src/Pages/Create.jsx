@@ -155,16 +155,7 @@ function App() {
             )
            }/> 
         </div>
-        <div className='container-fluid d-flex flex-row align-items-center justify-content-around p-1'>
-          <label htmlFor='intitalprompt'>Initial prompt:</label>
-          <textarea id = "converted-speech" className='form-outline w-75'
-            value={initialPrompt}
-            onChange={(event) => {
-              setInitialPrompt(event.target.value)             
-            }}
-          />
-        </div>
-
+        
         <div className='container-fluid d-flex flex-row align-items-center justify-content-around p-1'>
           <label htmlFor='imageid'>Image:</label>
           <Select id = "imageid" name="imageid" onChange={handleImgChange} isSearchable = {false} value={imageid} className='w-50' 
@@ -179,6 +170,16 @@ function App() {
            options={categories} formatOptionLabel={
             c => (<div>{c.value}. {c.name}</div> )
            }/> 
+        </div>
+
+        <div className='container-fluid d-flex flex-row align-items-center justify-content-around p-1'>
+          <label htmlFor='intitalprompt'>Initial prompt:</label>
+          <textarea id = "converted-speech" className='form-control w-75' rows={4}
+            value={initialPrompt}
+            onChange={(event) => {
+              setInitialPrompt(event.target.value)             
+            }}
+          />
         </div>
 
         <button className='btn btn-success' onClick={handleClick}>Submit</button>
