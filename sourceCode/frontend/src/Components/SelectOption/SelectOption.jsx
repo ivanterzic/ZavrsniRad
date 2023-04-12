@@ -7,7 +7,6 @@ import RadioContext from '../../Context/RadioContext';
 import ChatDataContext from '../../Context/ChatDataContext';
 import PersonaContext from '../../Context/PersonaContext';
 import { sendInitial } from '../../Utils/GPTUtils';
-import { send } from 'process';
 
 function SelectOption(props) {
     

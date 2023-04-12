@@ -33,11 +33,11 @@ function App() {
 
   async function fillData(){
     try {
-      let response = await backend.get("http://localhost:3001/getvoice/voices");
+      let response = await backend.get("/getvoice/voices");
       setVoices(response.data.map(voice => ({
         value : voice.name, language : voice.language, sample : voice.sample, gender : voice.gender
       })));
-      let cat = await backend.get("http://localhost:3001/categories");
+      let cat = await backend.get("/categories");
       setCategories(cat.data.map(c => ({value : c.id, name : c.name})))
     } catch (e) {
       alert(e);
@@ -85,7 +85,7 @@ function App() {
 
     console.log(sendObj)
     try {
-      let response = await axios.post("http://localhost:3001/create", sendObj)
+      let response = await backend.post("/create", sendObj)
       if (response.status === 400){
         alert("Something has gone wrong...")
       }
@@ -181,9 +181,7 @@ function App() {
             }}
           />
         </div>
-
         <button className='btn btn-success' onClick={handleClick}>Submit</button>
-        
       </div>
       
   );
