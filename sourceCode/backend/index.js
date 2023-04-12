@@ -6,7 +6,7 @@ var upload = multer();
 var cors = require('cors')
 
 const app = express();
-const PORT = 3001;
+const PORT = 5300;
 
 const personaRouter = require('./routes/persona.routes')
 const voiceRouter = require('./routes/voice.routes')

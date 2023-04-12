@@ -10,6 +10,7 @@ import axios from 'axios';
 
 import toonavatar from 'cartoon-avatar';
 import Conversation from '../Components/Conversation/Conversation';
+import backend from '../backendAPI';
 
 function App() {
   
@@ -21,7 +22,7 @@ function App() {
 
   async function fillData(){
     try {
-      let response = await axios.get("http://localhost:3001/personadata");
+      let response = await backend.get("/personadata");
       for (let p of response.data){
         console.log(p.image)
         p.imageurl = toonavatar.generate_avatar(
@@ -30,7 +31,7 @@ function App() {
         });  
       }
       setData(response.data);
-      let cat = await axios.get("http://localhost:3001/categories");
+      let cat = await backend.get("/categories");
       setCategories(cat.data)
       setLoaded(true)
     } catch (e) {
@@ -43,7 +44,6 @@ function App() {
     fillData()
   }, []);
 
-  //useEffect(() => {console.log(data)}, [data]); //printing data to make sure it is ok!
 
   return (
       <div className="App">
