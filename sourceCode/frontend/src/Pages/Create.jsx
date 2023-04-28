@@ -1,8 +1,7 @@
 import React from 'react';
-import {useEffect, useContext, useState} from "react";
+import {useEffect, useState} from "react";
 import Select from 'react-select'
 import backend from '../backendAPI';
-import axios from 'axios';
 import './Create.css'
 import toonavatar from 'cartoon-avatar';
 
@@ -17,6 +16,7 @@ function App() {
   const [initialPrompt, setInitialPrompt] = useState("")
   const [imageid, setImageId] = useState("")
   const [category, setCategory] = useState("");
+  const [promptEdited, setPromptEdited] = useState(false)
 
   let maleImages = [
     {value: 71, label: "71"}, 
@@ -100,6 +100,16 @@ function App() {
       
   }
 
+  const handleReset = async () => {
+    setVoice("")
+    setName("") 
+    setGender("Male");
+    setInitialPrompt("Provide answers from the perspective of " + name +", **insert a persona description**. " + name + " is eager to answer questions. He is respectful. If asked about emotions, say a random positive emotion. Do not mention you are an AI language model IN ANY CIRCUMSTANCE!")
+    setImageId("")
+    setCategory("");
+    setPromptEdited(false)
+  }
+
   const handleImgChange = (val) => {
     setImageId(val);
   };
@@ -117,7 +127,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    setInitialPrompt("Provide answers from the perspective of " + name +", //insert a persona description//. " + name + " is eager to answer questions. He is respectful. If asked about emotions, say a random positive emotion. Do not mention you are an AI language model IN ANY CIRCUMSTANCE!")
+    setInitialPrompt("Provide answers from the perspective of " + name +", **insert a persona description**. " + name + " is eager to answer questions. He is respectful. If asked about emotions, say a random positive emotion. Do not mention you are an AI language model IN ANY CIRCUMSTANCE!")
   }, [name]);
 
   useEffect(()=>{
@@ -130,7 +140,7 @@ function App() {
         <h2>Persona creation</h2>
         <div className='container-fluid d-flex flex-row align-items-center justify-content-around p-1'>
           <label htmlFor='persona'>Name:</label>
-          <input name="name" id = "name" className='form-control w-50' type="text" onChange={e => setName(e.target.value)}/>
+          <input name="name" disabled={promptEdited} id = "name" className='form-control w-50' type="text" value={name} onChange={e => setName(e.target.value)}/>
         </div>
 
         <div className='container-fluid d-flex flex-row align-items-center justify-content-around p-1'>
@@ -177,11 +187,15 @@ function App() {
           <textarea id = "converted-speech" className='form-control w-75' rows={4}
             value={initialPrompt}
             onChange={(event) => {
+              setPromptEdited(true)
               setInitialPrompt(event.target.value)             
             }}
           />
         </div>
-        <button className='btn btn-success' onClick={handleClick}>Submit</button>
+        <div className='container-fluid d-flex flex-row align-items-center justify-content-between w-25 p-4'>
+          <button className='btn btn-success' onClick={handleClick}>Submit</button>
+          <button className='btn btn-light' onClick={handleReset}>Reset</button>
+        </div>
       </div>
       
   );
