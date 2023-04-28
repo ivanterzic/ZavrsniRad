@@ -21,6 +21,7 @@ router.post("/", async (req, res) => {
             //frequency_penalty : 1
             })
         if(response.status == 429){
+            console.log(response)
             res.status(429)
             res.send()
         }

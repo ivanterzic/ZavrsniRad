@@ -11,7 +11,7 @@ let categories = [{
     "name" : "Way of thinking"
   }  ,
   {
-    "id" : 3,
+    "id" : 4,
     "name" : "Fictional"
   }
 ]

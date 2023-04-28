@@ -10,8 +10,7 @@ router.get("/", (req, res) => {
     catch (e) {
         res.status(429)
         res.send()
-    }
-    
+    }  
 });
 
 module.exports = router

@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
     try {
         const result = await db.query(sql, []);
         console.log(result.rows);
-        res.json(result.rows);
+        res.json(persona);
     }
     catch (e) {
         console.log(e)

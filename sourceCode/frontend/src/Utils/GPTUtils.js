@@ -1,8 +1,12 @@
 import { loader, scrollDown } from "./Utils";
 import backend from "../backendAPI";
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export async function sendCompletionRequest(chatData) {
-  
+  await sleep(20000)
   let response = await backend.post("/chatcompletion", chatData)
   return response;
 };
@@ -21,14 +25,6 @@ export async function sendInitial(chatData, setChatData, prompt, setDisabled, se
       "role" : "user", 
     "content" : prompt
     })
-  //console.log(chatData)
-  
-  /*let response = await sendCompletionRequest(chatData)*/ 
-  
-  //dodan umjetan odgovor kojim cemo smanjiti poruke poslane na API i samim tim smanjiti API pricing
-  //console.log("Initial message sent")
-  //console.log(response.data.choices[0].message);
-
   setChatData([...chatData, {
     "role" : "assistant", 
     "content" : "OK."

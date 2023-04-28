@@ -38,6 +38,10 @@ function Conversation(props) {
                 document.getElementById("p2-typing").appendChild(div)
                 loader(div)
                 pendingText = await sendTwoPersonaPrompt(persona2Data, newMessage, setPersona2Data)
+                if(pendingText.includes(persona2.name + ":")){
+                    let s = pendingText.split(persona2.name + ":")
+                    pendingText = s[0] + s[1]
+                }
                 chatData.push({"role" : "p2", "content" : pendingText})
                 setTurn(1)
                 setNewMessage(pendingText)  
@@ -48,6 +52,10 @@ function Conversation(props) {
                 document.getElementById("p1-typing").appendChild(div)
                 loader(div)
                 pendingText = await sendTwoPersonaPrompt(persona1Data, newMessage, setPersona1Data)
+                if(pendingText.includes(persona1.name + ":")){
+                    let s = pendingText.split(persona1.name + ":")
+                    pendingText = s[0] + s[1]
+                }
                 chatData.push({"role" : "p1", "content" : pendingText})
                 setTurn(2)
                 setNewMessage(pendingText)
@@ -58,6 +66,7 @@ function Conversation(props) {
     }
 
     async function startConversation(e){
+        
         if (persona1 === undefined || !persona2){
             alert("Please select both personas!")
         }
@@ -81,7 +90,7 @@ function Conversation(props) {
                 let div = document.createElement("div")
                 document.getElementById("p1-typing").appendChild(div)
                 loader(div)
-                pendingText = await sendTwoPersonaPrompt(persona1Data, persona1.initialPrompt + ` The user is in this case ${persona2.name}. The topic of the conversation is ${topic}, initiate a conversation with a short message! DO NOT GENERATE THE WHOLE CONVERSATION!!!`, setPersona1Data)
+                pendingText = await sendTwoPersonaPrompt(persona1Data, persona1.initialPrompt + ` The user is in this case ${persona2.name}. The topic of the conversation is ${topic}, initiate a conversation with a short message! Do not generate messages from the user!`, setPersona1Data)
                 setChatData([{"role" : "p1", "content" : pendingText}])
                 div.remove()
                 setNewMessage(pendingText)
@@ -153,7 +162,7 @@ function Conversation(props) {
             <button disabled={!conversationStarted || (conversationStarted && conversationHappening) || awaitingMessage} type="button" className="btn btn-success" onClick={e => changeTopic()}>Change topic</button>
         </div>
         <div className='container-fluid d-flex flex-row align-items-center justify-content-center'>
-            <button disabled = {!conversationStarted} onClick={(e) => {
+            <button disabled = {!conversationStarted || !conversationHappening && awaitingMessage} onClick={(e) => {
                 setConversationHappening(!conversationHappening)
             }}>{conversationHappening ? "⏸" : "▶️"}</button>
         </div>
@@ -183,7 +192,6 @@ function Conversation(props) {
                 </div>
                 <div id = "chat-body" className='chat-body overflow-auto d-flex flex-column'>
                 {chatData.map( (d) => {
-                    console.log(d)
                     let r = d.role.toString()
                     let c = d.content.toString()
                     return r === "p1" ? 
