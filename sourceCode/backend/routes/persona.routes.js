@@ -4,7 +4,13 @@ const persona = require('../data/db')
 
 //returning a list of persona for the user to choose from
 router.get("/", (req, res) => {
-    res.json(persona);
+    try {
+        res.json(categories);
+    }
+    catch (e) {
+        res.status(429)
+        res.send()
+    }
 });
 
 module.exports = router

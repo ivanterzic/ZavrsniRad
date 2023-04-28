@@ -4,7 +4,14 @@ const categories = require('../data/categories')
 
 //returning a list of persona for the user to choose from
 router.get("/", (req, res) => {
-    res.json(categories);
+    try {
+        res.json(categories);
+    }
+    catch (e) {
+        res.status(429)
+        res.send()
+    }
+    
 });
 
 module.exports = router

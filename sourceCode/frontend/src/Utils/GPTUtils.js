@@ -26,14 +26,12 @@ export async function sendInitial(chatData, setChatData, prompt, setDisabled, se
   /*let response = await sendCompletionRequest(chatData)*/ 
   
   //dodan umjetan odgovor kojim cemo smanjiti poruke poslane na API i samim tim smanjiti API pricing
-
-
   //console.log("Initial message sent")
   //console.log(response.data.choices[0].message);
 
   setChatData([...chatData, {
     "role" : "assistant", 
-    "content" : "OK"
+    "content" : "OK."
   }])
   setStatus("Active")
   setDisabled(false)
