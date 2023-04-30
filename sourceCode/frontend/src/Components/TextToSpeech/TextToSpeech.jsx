@@ -40,7 +40,17 @@ function TextToSpeech(props) {
             "speed": string, // Optional
             "preset": string // Optional*/
         };
-        let response = await backend.post("/getvoice", request)
+
+        let response 
+        try{
+            response = await backend.post("/getvoice", request)
+        }
+        catch(e){
+            alert("An error has occured!")
+            console.log(e)
+            return
+        }
+        
         isSpeaking = true
         let a = new Audio(response.data)  
         a.onended = function(e){

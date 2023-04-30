@@ -37,7 +37,13 @@ function Conversation(props) {
                 let div = document.createElement("div")
                 document.getElementById("p2-typing").appendChild(div)
                 loader(div)
-                pendingText = await sendTwoPersonaPrompt(persona2Data, newMessage, setPersona2Data)
+                try {
+                    pendingText = await sendTwoPersonaPrompt(persona2Data, newMessage, setPersona2Data)
+                }
+                catch (e) {
+                    alert ("An error has occured!")
+                    console.log(e)
+                }
                 if(pendingText.includes(persona2.name + ":")){
                     let s = pendingText.split(persona2.name + ":")
                     pendingText = s[0] + s[1]
@@ -51,7 +57,13 @@ function Conversation(props) {
                 let div = document.createElement("div")
                 document.getElementById("p1-typing").appendChild(div)
                 loader(div)
-                pendingText = await sendTwoPersonaPrompt(persona1Data, newMessage, setPersona1Data)
+                try {
+                    pendingText = await sendTwoPersonaPrompt(persona1Data, newMessage, setPersona1Data)
+                }
+                catch (e) {
+                    alert ("An error has occured!")
+                    console.log(e)
+                }
                 if(pendingText.includes(persona1.name + ":")){
                     let s = pendingText.split(persona1.name + ":")
                     pendingText = s[0] + s[1]
@@ -90,7 +102,14 @@ function Conversation(props) {
                 let div = document.createElement("div")
                 document.getElementById("p1-typing").appendChild(div)
                 loader(div)
-                pendingText = await sendTwoPersonaPrompt(persona1Data, persona1.initialPrompt + ` The user is in this case ${persona2.name}. The topic of the conversation is ${topic}, initiate a conversation with a short message! Do not generate messages from the user!`, setPersona1Data)
+                try {
+                    pendingText = await sendTwoPersonaPrompt(persona1Data, persona1.initialPrompt + ` The user is in this case ${persona2.name}. The topic of the conversation is ${topic}, initiate a conversation with a short message! Do not generate messages from the user!`, setPersona1Data)
+                }
+                catch (e) {
+                    alert("An error has occured!")
+                    console.log(e)
+                }
+                
                 setChatData([{"role" : "p1", "content" : pendingText}])
                 div.remove()
                 setNewMessage(pendingText)

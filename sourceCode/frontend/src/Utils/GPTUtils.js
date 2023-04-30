@@ -88,41 +88,21 @@ export async function sendTwoPersonaPrompt(chatData, textInput, setChatData){
   console.log(textInput)
   await chatData.push({"role" : "user", "content" : textInput})
   await setChatData(chatData)
-    
-  /*let div
-  try{
-      div = document.createElement("div")
-      document.getElementById("chat-header").appendChild(div)
-      loader(div)
-  } catch(e){console.log(e)}*/
-  
   try{scrollDown(document.getElementById("chat-body"))} catch (e) {console.log("No div to scroll down on")}
   let response
   try {
     response = await sendCompletionRequest(chatData)
     console.log(response)
     if (response.status == 429){
-      /*try {
-        div.remove()
-      } catch (e) {console.log(e)}
-      setDisabled(false)*/
       alert("OpenAI API is overcrowded.")
       return
     }
   } catch (e) {
-    /*try {
-      div.remove()
-    } catch (e) {console.log(e)}
-    setDisabled(false)*/
     alert("An error has occured while reaching OpenAI API")
     return
   } 
   console.log(response.data);
   await setChatData([...chatData, {"role" : "assistant", "content" : response.data.content}])
- 
-  /*try{
-      div.remove()
-  } catch (e) {console.log(e)}*/
   console.log(chatData)  
     return response.data.content
 }

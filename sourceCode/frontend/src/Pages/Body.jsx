@@ -41,7 +41,12 @@ function App() {
   }
 
   useEffect(() => {
-    fillData()
+    try {
+      fillData()
+    }
+    catch (e){
+      alert("An error has occured!")
+    }
   }, []);
 
 
