@@ -25,7 +25,7 @@ function Chatbot() {
 
   useEffect(() => { 
     if (personaObj && chatData.length == 0)
-      sendInitial(chatData, setChatData, personaObj.initialPrompt + "Write OK for confirmation. The questions will be provided by the user in the following messages.", setDisabled, setStatus );
+      sendInitial(chatData, setChatData, personaObj.initialPrompt + "Write OK for confirmation. The questions will be provided by the user in the following messages.", setDisabled, setStatus);
   }, [personaObj]);
 
   useEffect(() => { 
@@ -36,7 +36,7 @@ function Chatbot() {
     !personaObj || status === "Pending" ? setDisabled(true) : setDisabled(false)
   }, [status, personaObj])
 
-console.log(chatData)
+
 
   return (
     <div className='container-fluid d-flex flex-column align-items-center justify-content-center'>
@@ -53,10 +53,10 @@ console.log(chatData)
         </div>
         <div id = "chat-body" className='chat-body overflow-auto d-flex flex-column'>
           {chatData.slice(2).map( (d) => {
-            console.log(d)
+            
               let r = d.role.toString()
               let c = d.content.toString()
-              console.log(chatData)
+              
               return r === "assistant" ? 
                 (<div className='d-flex flex-row' key = {generateUniqueId()}>
                   <div className='bg-success text-light mt-1 chat-message ai-chat-message'>{c}</div>

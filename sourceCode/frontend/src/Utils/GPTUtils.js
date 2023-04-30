@@ -11,14 +11,21 @@ export async function sendCompletionRequest(chatData) {
   return response;
 };
 
+export async function sendStopCompletionRequest(chatData, stop) {
+  //await sleep(20000)
+  let response = await backend.post("/chatcompletion/withstop", {
+    "chatData" : chatData,
+    "stop" : stop
+  })
+  return response;
+};
+
 export async function sendInitial(chatData, setChatData, prompt, setDisabled, setStatus) {
   setDisabled(false)
   setStatus("Pending")
-
   const div = document.createElement("div")
   document.getElementById("chat-header").appendChild(div)
   div.innerHTML += "Connecting..."
-
   setChatData([])
   chatData.push(
     {
@@ -40,9 +47,7 @@ export async function sendPrompt(chatData, setChatData, userTextInput, setUserTe
   await chatData.push({"role" : "user", "content" : userTextInput})
   await setChatData(chatData)
   setUserTextInput("")
-  setDisabled(true)
-  console.log(chatData)
-  
+  setDisabled(true)  
   let div
   try{
       div = document.createElement("div")
@@ -84,14 +89,14 @@ export async function sendPrompt(chatData, setChatData, userTextInput, setUserTe
     return response.data.content
 }
 
-export async function sendTwoPersonaPrompt(chatData, textInput, setChatData){
-  console.log(textInput)
+export async function sendTwoPersonaPrompt(chatData, textInput, setChatData, stop){
+  //console.log(textInput)
   await chatData.push({"role" : "user", "content" : textInput})
   await setChatData(chatData)
   try{scrollDown(document.getElementById("chat-body"))} catch (e) {console.log("No div to scroll down on")}
   let response
   try {
-    response = await sendCompletionRequest(chatData)
+    response = await sendStopCompletionRequest(chatData, stop)
     console.log(response)
     if (response.status == 429){
       alert("OpenAI API is overcrowded.")
@@ -101,8 +106,8 @@ export async function sendTwoPersonaPrompt(chatData, textInput, setChatData){
     alert("An error has occured while reaching OpenAI API")
     return
   } 
-  console.log(response.data);
+  //console.log(response.data);
   await setChatData([...chatData, {"role" : "assistant", "content" : response.data.content}])
-  console.log(chatData)  
+  //console.log(chatData)  
     return response.data.content
 }

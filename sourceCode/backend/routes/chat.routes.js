@@ -10,15 +10,13 @@ const openai = new OpenAIApi(configuration);
 
 router.post("/", async (req, res) => {
     chatData = req.body
+    console.log(chatData)
     try {
         const response = await openai.createChatCompletion({
             model: model,
             messages: chatData,
-            temperature : 0.8, //2 je too much, daje prerandom odgovore, 0.8 je okej
-            //top_p : 1,
-            //max_tokens : , 
+            temperature : 0.8,
             presence_penalty : 1.3,
-            //frequency_penalty : 1
             })
         if(response.status == 429){
             console.log(response)
@@ -28,7 +26,38 @@ router.post("/", async (req, res) => {
         res.send(response.data.choices[0].message);
     }
     catch (e) {
-        res.status(429)
+        res.status(400)
+        console.log(e)
+        res.send()
+    }
+    
+});
+
+router.post("/withstop", async (req, res) => {
+
+    chatData = req.body.chatData
+    stop = req.body.stop
+
+
+    let response
+    try {
+        response = await openai.createChatCompletion({
+            model: model,
+            messages: chatData,
+            temperature : 0.8,
+            presence_penalty : 1.3,
+            stop : stop
+            })
+        if(response.status == 429){
+            console.log(response)
+            res.status(429)
+            res.send()
+        }
+        res.send(response.data.choices[0].message);
+    }
+    catch (e) {
+        res.status(400)
+        //console.log(e)
         res.send()
     }
     

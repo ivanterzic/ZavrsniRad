@@ -38,7 +38,7 @@ function Conversation(props) {
                 document.getElementById("p2-typing").appendChild(div)
                 loader(div)
                 try {
-                    pendingText = await sendTwoPersonaPrompt(persona2Data, newMessage, setPersona2Data)
+                    pendingText = await sendTwoPersonaPrompt(persona2Data, newMessage, setPersona2Data, persona1.name + ":")
                 }
                 catch (e) {
                     alert ("An error has occured!")
@@ -58,7 +58,7 @@ function Conversation(props) {
                 document.getElementById("p1-typing").appendChild(div)
                 loader(div)
                 try {
-                    pendingText = await sendTwoPersonaPrompt(persona1Data, newMessage, setPersona1Data)
+                    pendingText = await sendTwoPersonaPrompt(persona1Data, newMessage, setPersona1Data, persona2.name + ":")
                 }
                 catch (e) {
                     alert ("An error has occured!")
@@ -103,7 +103,7 @@ function Conversation(props) {
                 document.getElementById("p1-typing").appendChild(div)
                 loader(div)
                 try {
-                    pendingText = await sendTwoPersonaPrompt(persona1Data, persona1.initialPrompt + ` The user is in this case ${persona2.name}. The topic of the conversation is ${topic}, initiate a conversation with a short message! Do not generate messages from the user!`, setPersona1Data)
+                    pendingText = await sendTwoPersonaPrompt(persona1Data, persona1.initialPrompt + ` The user is in this case ${persona2.name}. The topic of the conversation is ${topic}, initiate a conversation with a short message! Do not generate messages from the user!`, setPersona1Data, persona2.name + ":")
                 }
                 catch (e) {
                     alert("An error has occured!")

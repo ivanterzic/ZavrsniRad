@@ -9,12 +9,12 @@ function PersonaSelector(props) {
     const {chatData, setChatData} = useContext(ChatDataContext)
     const [value, setValue] = useState();
  
-    console.log(props.categories)
+
     return (
         <div className='d-flex flex-row flex-wrap align-items-center justify-content-around'>
             <select id = "persona-select" name = "persona" className="selectpicker p-2" onChange={(e)=>{
                 setValue(e.target.value)
-                console.log("Persona value changed!")
+        
             }}>
                 {props.categories.map((c) => {
                     return(
@@ -30,13 +30,13 @@ function PersonaSelector(props) {
             </select>
             <button type="button" className="btn btn-success" onClick={(e) => {
                 let val = document.getElementById("persona-select").value
-                console.log(JSON.parse(val))
+
                 
                 if (!persona || JSON.parse(val).name !== JSON.parse(persona).name) {
                     let resp = window.confirm("Are you sure you want to select this persona: " + JSON.parse(val).name + "? Current chat data will be deleted! ")
                     if (resp){
                         setPersona(val)
-                        console.log("Persona selected : " + val)
+
                         setChatData([])
                     }
                     else {
