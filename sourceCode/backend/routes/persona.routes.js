@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const persona = require('../data/db')
 const db = require('../db')
 
 //returning a list of persona for the user to choose from
@@ -9,12 +8,11 @@ router.get("/", async (req, res) => {
     FROM persona`;
     try {
         const result = await db.query(sql, []);
-        console.log(result.rows);
-        res.json(persona);
+        res.json(result.rows);
     }
     catch (e) {
         console.log(e)
-        res.status(429)
+        res.status(400)
         res.send()
     }
 });
