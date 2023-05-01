@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 export function scrollDown(e) {
     e.scrollTop = e.scrollHeight;
 }
@@ -18,4 +20,4 @@ export function loader(e) {
           e.textContent = 'Typing';
         }
     }, 300);
-  }
+}

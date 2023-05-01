@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const categories = require('../data/categories')
 const db = require('../db')
 
 //returning a list of persona for the user to choose from

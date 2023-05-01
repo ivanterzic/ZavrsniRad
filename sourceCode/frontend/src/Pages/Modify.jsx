@@ -1,8 +1,27 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 function App() {
   
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (sessionStorage.getItem("username") === undefined) {
+      navigate('/login')
+    }
+    if (sessionStorage.getItem("level") !== "2"){
+      navigate('/noaccess')
+    }
+
+  
+ 
+  
+  }, []);
+
   return (
+
+
       <div className="container-fluid d-flex flex-column align-items-center justify-content-center w-50 p-4">
         <h2>Persona profile creation</h2>
 

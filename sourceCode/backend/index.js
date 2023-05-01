@@ -13,6 +13,7 @@ const voiceRouter = require('./routes/voice.routes')
 const chatRouter = require('./routes/chat.routes')
 const categoriesRouter = require('./routes/categories.routes')
 const createRouter = require('./routes/create.routes')
+const loginRouter = require('./routes/login.routes')
 
 app.options('/', cors)
 app.use(express.urlencoded({ extended: true }));
@@ -38,6 +39,7 @@ app.use('/getvoice', voiceRouter);
 app.use('/chatcompletion', chatRouter);
 app.use('/categories', categoriesRouter);
 app.use('/create', createRouter);
+app.use('/login', loginRouter);
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

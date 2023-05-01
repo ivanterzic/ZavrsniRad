@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../data/db')
+
 
 router.post("/", async (req, res) => {
     try {
@@ -27,7 +27,8 @@ router.post("/", async (req, res) => {
         }
         
 
-        const sql = `INSERT INTO persona (personaName, personaGender, personaImageId, personaInitialPrompt, personaVoice, personaCategoryId, creatorUserName VALUES( ${}, ${} )`;
+       // const sql = `INSERT INTO persona (personaName, personaGender, personaImageId, personaInitialPrompt, personaVoice, personaCategoryId, 
+        //creatorUserName VALUES( ${}, ${} )`;
 
         //TODO RIJESITI KAD RIJESIS LOGIN DA MOZES DODATI USERNAME
 

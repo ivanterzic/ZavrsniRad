@@ -4,6 +4,7 @@ import Select from 'react-select'
 import backend from '../backendAPI';
 import './Create.css'
 import toonavatar from 'cartoon-avatar';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
   
@@ -17,6 +18,7 @@ function App() {
   const [imageid, setImageId] = useState("")
   const [category, setCategory] = useState("");
   const [promptEdited, setPromptEdited] = useState(false)
+  const navigate = useNavigate
 
   let maleImages = [
     {value: 71, label: "71"}, 
@@ -138,12 +140,23 @@ function App() {
   };
 
   useEffect(() => {
+
+
+    if (sessionStorage.getItem("username") === undefined) {
+      navigate('/login')
+    }
+    if (sessionStorage.getItem("level") !== "2"){
+      navigate('/noaccess')
+    }
+
     try {
       fillData()
     }
     catch (e){
       alert("An error has occured!")
     }
+ 
+  
   }, []);
 
   useEffect(() => {

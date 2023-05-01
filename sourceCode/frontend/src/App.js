@@ -8,6 +8,8 @@ import Body from './Pages/Body';
 import Login from './Pages/Login';
 import Modify from './Pages/Modify';
 import Create from './Pages/Create'
+import NoAccess from './Pages/NoAccess';
+import CreateUser from './Pages/CreateUser';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import {RadioProvider} from './Context/RadioContext';
@@ -19,19 +21,6 @@ import { UserTextInputProvider } from './Context/UserInputContext';
 import NoPage from './Pages/NoPage';
 /*"start": "PORT=4300 react-scripts start",*/
 function App() {
-
-  
-
-  const [token, setToken] = useState();
-
-  if(!token) {
-    return (
-      <>
-        <Header></Header>
-        <Login setToken={setToken} />
-      </>
-    ) 
-  }
 
   return (
   <>
@@ -47,6 +36,8 @@ function App() {
                       <Route path ="login" element={<Login />} />
                       <Route path="modify" element={<Modify />} />
                       <Route path="create" element={<Create />} />
+                      <Route path="createuser" element={<CreateUser />} />
+                      <Route path="noaccess" element={<NoAccess />} />
                       <Route path="*" element={<NoPage />}>
                     </Route>
                   </Routes>

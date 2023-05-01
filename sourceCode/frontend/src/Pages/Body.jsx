@@ -6,14 +6,16 @@ import RadioContext from '../Context/RadioContext';
 import PersonaContext from '../Context/PersonaContext';
 import Chatbot from '../Components/Chatbot/Chatbot';
 import Interactive from '../Components/Interactive/Interactive'
-import axios from 'axios';
 
 import toonavatar from 'cartoon-avatar';
 import Conversation from '../Components/Conversation/Conversation';
 import backend from '../backendAPI';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
   
+  const navigate = useNavigate();
+
   const { radio, setRadio } = useContext(RadioContext);
   const { persona, setPersona } = useContext(PersonaContext); //used for storing a selected persona
   const [data, setData] = useState([]); //used for an array of specific persona a user is able to select
@@ -24,7 +26,6 @@ function App() {
     try {
       let response = await backend.get("/personadata");
       for (let p of response.data){
-        console.log(p.image)
         p.imageurl = toonavatar.generate_avatar(
           {"gender": p.gender, 
             "id": p.imageid ? p.imageid : null
@@ -41,6 +42,14 @@ function App() {
   }
 
   useEffect(() => {
+
+    if (sessionStorage.getItem("username") === undefined) {
+      navigate('/login')
+    }
+    if (sessionStorage.getItem("level") !== "3"){
+      navigate('/noaccess')
+    }
+
     try {
       fillData()
     }
