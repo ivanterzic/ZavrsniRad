@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import UserContext from '../Context/UserContext';
 
 function App() {
   
   const navigate = useNavigate()
+  const {user, setUser} = useContext(UserContext)
 
   useEffect(() => {
-    if (sessionStorage.getItem("username") === undefined) {
+    if (user === undefined) {
       navigate('/login')
     }
-    if (sessionStorage.getItem("level") !== "2"){
+    else if (user["privlevel"] !== 2){
       navigate('/noaccess')
     }
 

@@ -11,11 +11,13 @@ import toonavatar from 'cartoon-avatar';
 import Conversation from '../Components/Conversation/Conversation';
 import backend from '../backendAPI';
 import { useNavigate } from 'react-router-dom';
+import UserContext from '../Context/UserContext';
 
 function App() {
   
   const navigate = useNavigate();
 
+  const {user, setUser} = useContext(UserContext)
   const { radio, setRadio } = useContext(RadioContext);
   const { persona, setPersona } = useContext(PersonaContext); //used for storing a selected persona
   const [data, setData] = useState([]); //used for an array of specific persona a user is able to select
@@ -42,14 +44,12 @@ function App() {
   }
 
   useEffect(() => {
-
-    if (sessionStorage.getItem("username") === undefined) {
+    if (user === undefined) {
       navigate('/login')
     }
-    if (sessionStorage.getItem("level") !== "3"){
+    else if (user["privlevel"] !== 3){
       navigate('/noaccess')
     }
-
     try {
       fillData()
     }

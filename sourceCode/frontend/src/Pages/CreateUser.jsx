@@ -1,17 +1,18 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import UserContext from "../Context/UserContext";
 
 const CreateUser = () => {
 
     const navigate = useNavigate()
-
+    const {user, setUser} = useContext(UserContext)
     useEffect(()=>{
-        if (sessionStorage.getItem("username") === undefined) {
-            navigate('/login')
-          }
-          if (sessionStorage.getItem("level") !== "1"){
-            navigate('/noaccess')
-          }
+      if (user === undefined) {
+        navigate('/login')
+      }
+      else if (user["privlevel"] !== 1){
+        navigate('/noaccess')
+      }
     }, [])
 
     return <h2 className="container container-centered">Create User</h2>;

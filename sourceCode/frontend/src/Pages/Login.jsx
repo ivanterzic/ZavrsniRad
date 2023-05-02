@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {useNavigate} from 'react-router-dom'
 import backend from '../backendAPI';
+import UserContext from '../Context/UserContext';
 
 function Login() {
 
+  const {user, setUser} = useContext(UserContext)
   const navigate = useNavigate(); 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -22,13 +24,15 @@ function Login() {
       return
     }
     if (response.status == 200) {
-      sessionStorage.setItem("username", username)
-      sessionStorage.setItem("level", response.data.level)
-      if(sessionStorage.getItem("level") === "3")
+      setUser({
+        "username" : username,
+        "privlevel" : response.data.level
+      })
+      if(response.data.level === 3)
         navigate("/")
-      else if(sessionStorage.getItem("level") === "2")
+      else if(response.data.level === 2)
         navigate("/create")
-      else if(sessionStorage.getItem("level") === "1")
+      else if(response.data.level === 1)
         navigate("/createuser")
       else navigate("/")
     }
