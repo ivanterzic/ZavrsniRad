@@ -14,6 +14,8 @@ const chatRouter = require('./routes/chat.routes')
 const categoriesRouter = require('./routes/categories.routes')
 const createRouter = require('./routes/create.routes')
 const loginRouter = require('./routes/login.routes')
+const rolesRouter = require('./routes/roles.routes')
+const createuserRouter = require('./routes/createuser.routes')
 
 app.options('/', cors)
 app.use(express.urlencoded({ extended: true }));
@@ -40,6 +42,8 @@ app.use('/chatcompletion', chatRouter);
 app.use('/categories', categoriesRouter);
 app.use('/create', createRouter);
 app.use('/login', loginRouter);
+app.use('/roles', rolesRouter)
+app.use('/createuser', createuserRouter)
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

@@ -11,6 +11,7 @@ function Login() {
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState("");
 
+
   let handleSubmit = async () => {
     let response
     try {
@@ -46,8 +47,7 @@ function Login() {
   }
 
   return (
-    <div className='container-fluid d-flex flex-column align-items-center justify-content-center p-4'>
-        
+    <div className='container-fluid d-flex flex-column align-items-center justify-content-center p-4'> 
         <h3>Login</h3>
         <h6>{message}</h6>
         <div className="mb-3">
@@ -63,10 +63,19 @@ function Login() {
           <label>Password</label>
           <input
             type="password"
+            id = "password"
             className="form-control"
             placeholder="Enter password"
             onChange={(e) => {setPassword(e.target.value)}}
           />
+          <input type="checkbox" onClick={e => {
+            var x = document.getElementById("password");
+            if (x.type === "password") {
+              x.type = "text";
+            } else {
+              x.type = "password";
+            }
+          }}></input> Show password
         </div>
         <div className="d-grid">
           <button className="btn btn-success" onClick={handleSubmit}>
