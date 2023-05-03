@@ -1,15 +1,15 @@
 import React, { useContext, useState } from 'react';
 import {useNavigate} from 'react-router-dom'
 import backend from '../backendAPI';
-import LoggedInContext from '../Context/LoggedInContext';
 
-function Login() {
+
+function Login(props) {
 
   const navigate = useNavigate(); 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState("");
-  const {loggedIn, setLoggedIn} = useContext(LoggedInContext)
+ 
 
 
   let handleSubmit = async () => {
@@ -27,7 +27,7 @@ function Login() {
     if (response.status === 200) {
       sessionStorage.setItem("username", username)
       sessionStorage.setItem("privlevel", response.data.level)
-      setLoggedIn(true)
+      props.setLoggedIn(true)
       if(response.data.level === 3)
         navigate("/")
       else if(response.data.level === 2)

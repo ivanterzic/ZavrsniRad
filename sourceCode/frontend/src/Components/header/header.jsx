@@ -1,18 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import './header.css'
 import { useNavigate } from 'react-router-dom';
-import LoggedInContext from '../../Context/LoggedInContext';
 
 
-function Header() {
-
-    const {loggedIn, setLoggedIn} = useContext(LoggedInContext)
+function Header(props) {
 
     let navigate = useNavigate()
     let handleLogout = () => {
       sessionStorage.clear()
       navigate("/login")
-      setLoggedIn(false)
+      props.setLoggedIn(false)
     }
 
     return (
@@ -50,7 +47,7 @@ function Header() {
       
           <div className="d-flex flex-column align-items-center justify-content-center">
             {
-            loggedIn ?
+            props.loggedIn || sessionStorage.getItem("username") !== null ?
                 (<>
                   <div>
                     Welcome {sessionStorage.getItem("username")}!

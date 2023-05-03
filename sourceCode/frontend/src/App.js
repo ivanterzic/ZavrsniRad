@@ -18,24 +18,26 @@ import {PersonaProvider} from './Context/PersonaContext';
 import {ChatDataProvider} from './Context/ChatDataContext';
 import {DisabledProvider} from './Context/DisabledContext';
 import { UserTextInputProvider } from './Context/UserInputContext';
-import {LoggedInProvider} from './Context/LoggedInContext';
+
 import NoPage from './Pages/NoPage';
 /*"start": "PORT=4300 react-scripts start",*/
 function App() {
 
+  const [loggedIn, setLoggedIn] = useState(false)
+
   return (
   <>
-  <LoggedInProvider>
+
       <UserTextInputProvider>
         <DisabledProvider>
           <ChatDataProvider>
             <RadioProvider>
                 <PersonaProvider>
                   <Router>
-                    <Header></Header>
+                    <Header loggedIn = {loggedIn} setLoggedIn = {setLoggedIn}></Header>
                     <Routes>
                         <Route path="/" element={<Body />} />
-                        <Route path ="login" element={<Login />} />
+                        <Route path ="login" element={<Login loggedIn = {loggedIn} setLoggedIn = {setLoggedIn}/>} />
                         <Route path="modify" element={<Modify />} />
                         <Route path="create" element={<Create />} />
                         <Route path="createuser" element={<CreateUser />} />
@@ -49,7 +51,7 @@ function App() {
           </ChatDataProvider>
         </DisabledProvider>
       </UserTextInputProvider>
-    </LoggedInProvider>
+
   </>
     
   );

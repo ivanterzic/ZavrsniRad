@@ -21,3 +21,7 @@ export function loader(e) {
         }
     }, 300);
 }
+
+export function sanetizePrompt(prompt){
+  return prompt.replace("'", "''")
+}

@@ -6,20 +6,26 @@ import './Create.css'
 import toonavatar from 'cartoon-avatar';
 import { useNavigate } from 'react-router-dom';
 import { femaleImages, maleImages } from '../Utils/imageArrays';
-import { sanetizePrompt } from '../Utils/Utils';
 
 function App() {
   
   const [voices, setVoices] = useState([]); //used for an array of specific persona a user is able to select
+  const [categories, setCategories] = useState([]);
+
   const [voice, setVoice] = useState(""); 
   const [name, setName] = useState(""); 
   const [gender, setGender] = useState("Male"); 
   const [initialPrompt, setInitialPrompt] = useState("")
   const [imageid, setImageId] = useState("")
+  const [category, setCategory] = useState("");
+  const [promptEdited, setPromptEdited] = useState(false)
   const [message, setMessage] = useState("")
   const [persona, setPersona] = useState("")
   const [personaArray, setPersonaArray] = useState([])
+
   const navigate = useNavigate()
+
+  
 
   async function fillData(){
     try {
@@ -29,19 +35,22 @@ function App() {
       })));
       response = await backend.get("/personadata");
       setPersonaArray(response.data.map(p => ({
-        value : p.id, persona :  p
+        value : p.id, name : p.name
       })))
+      let cat = await backend.get("/categories");
+      setCategories(cat.data.map(c => ({value : c.id, name : c.name})))
     } catch (e) {
       alert(e);
     } 
   }
 
   const handleClick = async () => {
-    if (name.trim().length === 0) {
+    let personaName = name
+    if (personaName.trim().length === 0) {
       setMessage("Name of a persona can't be empty!")
       return
     }
-    if (name.trim().length > 50) {
+    if (personaName.trim().length > 50) {
       setMessage("Persona name must not be longer than 50 characters")
       return
     }
@@ -66,19 +75,26 @@ function App() {
       setMessage("An image must be selected!")
       return
     }
+
+    let personaCat = category.value
+    if (personaCat === undefined || personaCat.length === 0) {
+      setMessage("A category must be selected!")
+      return
+    }
+
     let sendObj = {
-      personaname : name, 
-      personainitialprompt : sanetizePrompt(initialPrompt),
-      personaimageid : imageid.value,
+      personaname : personaName, 
+      personainitialprompt : initialPrompt,
+      personaimageid : personaImage,
       personagender : gender,
-      personavoice : voice.value,
-      creatorusername : sessionStorage.getItem("username"),
-      originalpersona : persona.persona.id
+      personavoice : personaVoice,
+      personacategoryid : personaCat,
+      creatorusername : sessionStorage.getItem("username")
     }
     let response
-
+    console.log(sendObj)
     try {
-      response = await backend.post("/create/modified", sendObj)
+      response = await backend.post("/create", sendObj)
       if (response.status === 400){
         setMessage("An error has occured.")
       }
@@ -92,7 +108,7 @@ function App() {
       }
     } 
     catch(e){
-      setMessage("An error has occured!")
+      setMessage(response.data)
     }
       
   }
@@ -101,32 +117,28 @@ function App() {
     setPersona("")
     setVoice("")
     setName("") 
-    setGender("");
-    setInitialPrompt("")
+    setGender("Male");
+    setInitialPrompt("Provide answers from the perspective of " + name +", **insert a persona description**. " + name + " is eager to answer questions. He is respectful. If asked about emotions, say a random positive emotion. Do not mention you are an AI language model IN ANY CIRCUMSTANCE!")
     setImageId("")
+    setCategory("");
+    setPromptEdited(false)
   }
 
   const handleImgChange = (val) => {
-    console.log(val)
-    console.log(maleImages)
-    gender === "male" ? 
-    setImageId(maleImages.filter( i => {if (i.value === val) return i})[0])
-    :
-    setImageId(femaleImages.filter( i => {if (i.value === val) return i})[0])
+    setImageId(val);
+  };
+
+  const handleCatChange = (val) => {
+    setCategory(val);
   };
 
   const handleVoiceChange = (val) => {
-    setVoice(voices.filter( i => {if (i.value === val) return i})[0]);
-    
+    setVoice(val);
   };
 
   const handlePersonaChange = (val) => {
     setPersona(val);
-    setGender(val.persona.gender)
-    setName(val.persona.name)
-    handleVoiceChange(val.persona.voice)
-    handleImgChange(val.persona.imageid)
-    setInitialPrompt(val.persona.initialprompt)
+
   };
 
   useEffect(() => {
@@ -142,9 +154,18 @@ function App() {
     catch (e){
       alert("An error has occured!")
     }
-
+ 
+  
   }, []);
 
+  useEffect(() => {
+    setInitialPrompt("Provide answers from the perspective of " + name +", **insert a persona description**. " + name + " is eager to answer questions. He is respectful. If asked about emotions, say a random positive emotion. Do not mention you are an AI language model!")
+  }, [name]);
+
+  useEffect(()=>{
+    setVoice("")
+    setImageId("")
+  }, [gender])
 
   return (
     <div className='container-fluid d-flex flex-column align-items-center justify-content-center p-4'> 
@@ -155,10 +176,10 @@ function App() {
           <label htmlFor='voice'>Persona picker:</label>
           <Select id = "persona" name="persona" onChange={handlePersonaChange} isSearchable = {true} value={persona} className='' 
            options={personaArray} formatOptionLabel={
-            p => (
-              <div key = {p.id} className= 'd-flex flex-row allign-items-center justify-content-between'>
+            v => (
+              <div key = {{id: v.value, name: v.name} } className= 'd-flex flex-row allign-items-center justify-content-between'>
                 <div>
-                  {p.persona.name}
+                  {v.name}
                 </div> 
               </div>
             )
@@ -167,14 +188,24 @@ function App() {
 
         <div className="mb-3 w-25">
           <label htmlFor='persona'>Name:</label>
-          <input name="name" id = "name" className='form-control' type="text" value={name} onChange={e => setName(e.target.value)}/>
+          <input name="name" disabled={promptEdited} id = "name" className='form-control' type="text" value={name} onChange={e => setName(e.target.value)}/>
+        </div>
+      
+        <div className="mb-3 w-25">
+          <label htmlFor='gender'>Gender:</label>
+          <select name = "gender" className="form-select" onChange={(e) => {
+            setGender(e.target.value)
+          }}>
+            <option value={"Male"}>Male</option>
+            <option value={"Female"}>Female</option>
+          </select>
         </div>
         <div className="mb-3 w-25">
           <label htmlFor='voice'>Voice:</label>
           <Select id = "voices" name="voices" onChange={handleVoiceChange} isSearchable = {true} value={voice} className='' 
-           options={voices} formatOptionLabel={
+           options={gender === "Male" ? voices.filter(v => v.gender === "Male") : voices.filter(v => v.gender === "Female")} formatOptionLabel={
             v => (
-              <div key = {v} className= 'd-flex flex-row allign-items-center justify-content-between' hidden={(gender === "male" && v.gender === "male") || (gender === "female" && v.gender === "Female") ? false : true}>
+              <div key = {v.value} className= 'd-flex flex-row allign-items-center justify-content-between'>
                 <div>
                   {v.value}, {v.language},  <a href={v.sample}>Sample👈</a>
                 </div> 
@@ -186,23 +217,32 @@ function App() {
         <div className="mb-3 w-25">
           <label htmlFor='imageid'>Image:</label>
           <Select id = "imageid" name="imageid" onChange={handleImgChange} isSearchable = {true} value={imageid} className='' 
-           options={maleImages} formatOptionLabel={
-            img => (<div><img src={toonavatar.generate_avatar({"gender": gender, "id": img.label})} height="40px" width="40px"/>{imageid === img.label ? img.label + "✅" : img.label}</div> )
+           options={gender === "Male" ? maleImages : femaleImages} formatOptionLabel={
+            img => (<div><img src={toonavatar.generate_avatar({"gender": gender === "Male" ? "male" : "female", "id": img.label})} height="40px" width="40px"/>{imageid === img.label ? img.label + "✅" : img.label}</div> )
            }/> 
         </div>
+
         <div className="mb-3 w-25">
-          <label htmlFor='intitalprompt'>Initial prompt:</label>
+          <label htmlFor='category'>Category:</label>
+          <Select id = "imageid" name="imageid" onChange={handleCatChange} isSearchable={false} value={category} className='' 
+           options={categories} formatOptionLabel={
+            c => (<div>{c.value}. {c.name}</div> )
+           }/> 
+        </div>
+
+        <div className="mb-3 w-25">
+          <label htmlFor='intitalprompt' className=''>Initial prompt:</label>
           
         </div>
         <div className='container-fluid d-flex flex-column align-items-center w-50'>
             <textarea id = "converted-speech" className='form-control' rows={5}
               value={initialPrompt}
               onChange={(event) => {
+                setPromptEdited(true)
                 setInitialPrompt(event.target.value)             
               }}
             />
-            {initialPrompt !== undefined ? <span className='align-self-start'>Prompt length: {initialPrompt.trim().length}, max length is 1000</span> : null}
-            
+            <span className='align-self-start'>Prompt length: {initialPrompt.trim().length}, max length is 1000</span>
           </div>
        
         <div className='container-fluid d-flex flex-row align-items-center justify-content-center w-25 p-4'>

@@ -14,7 +14,7 @@ router.get("/voices", async (req, res) => {
     res.send(returnArray)
   } 
   catch {
-    res.statusCode(429)
+    res.status(400)
     res.send()
   }
 })
@@ -46,7 +46,7 @@ router.post("/", async (req, res) => {
     res.send(response.data.audioUrl)
   }
   catch (e) {
-    res.statusCode(429)
+    res.status(429)
     res.send()
   }
 });
