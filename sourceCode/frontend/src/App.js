@@ -18,35 +18,38 @@ import {PersonaProvider} from './Context/PersonaContext';
 import {ChatDataProvider} from './Context/ChatDataContext';
 import {DisabledProvider} from './Context/DisabledContext';
 import { UserTextInputProvider } from './Context/UserInputContext';
+import {LoggedInProvider} from './Context/LoggedInContext';
 import NoPage from './Pages/NoPage';
 /*"start": "PORT=4300 react-scripts start",*/
 function App() {
 
   return (
   <>
-    <UserTextInputProvider>
-      <DisabledProvider>
-        <ChatDataProvider>
-          <RadioProvider>
-              <PersonaProvider>
-                <Router>
-                  <Header></Header>
-                  <Routes>
-                      <Route path="/" element={<Body />} />
-                      <Route path ="login" element={<Login />} />
-                      <Route path="modify" element={<Modify />} />
-                      <Route path="create" element={<Create />} />
-                      <Route path="createuser" element={<CreateUser />} />
-                      <Route path="noaccess" element={<NoAccess />} />
-                      <Route path="*" element={<NoPage />}>
-                    </Route>
-                  </Routes>
-                </Router>
-              </PersonaProvider>
-            </RadioProvider>
-        </ChatDataProvider>
-      </DisabledProvider>
-    </UserTextInputProvider>
+  <LoggedInProvider>
+      <UserTextInputProvider>
+        <DisabledProvider>
+          <ChatDataProvider>
+            <RadioProvider>
+                <PersonaProvider>
+                  <Router>
+                    <Header></Header>
+                    <Routes>
+                        <Route path="/" element={<Body />} />
+                        <Route path ="login" element={<Login />} />
+                        <Route path="modify" element={<Modify />} />
+                        <Route path="create" element={<Create />} />
+                        <Route path="createuser" element={<CreateUser />} />
+                        <Route path="noaccess" element={<NoAccess />} />
+                        <Route path="*" element={<NoPage />}>
+                      </Route>
+                    </Routes>
+                  </Router>
+                </PersonaProvider>
+              </RadioProvider>
+          </ChatDataProvider>
+        </DisabledProvider>
+      </UserTextInputProvider>
+    </LoggedInProvider>
   </>
     
   );

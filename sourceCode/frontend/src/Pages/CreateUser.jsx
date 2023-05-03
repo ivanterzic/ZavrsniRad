@@ -18,12 +18,16 @@ const CreateUser = () => {
         setMessage("Username can't be empty")
         return
       }
+      if (username.trim().length > 25) {
+        setMessage("Username must not be longer than 25 characters!")
+        return
+      }
       if (password.trim().length === 0) {
         setMessage("Password can't be empty")
         return
       }
       if (password.trim().length < 8 || password.trim().length > 25) {
-        setMessage("Password must be lbetween 8 and 25 characters long!")
+        setMessage("Password must be between 8 and 25 characters long!")
         return
       }
       if (password !== repeatPpassword) {

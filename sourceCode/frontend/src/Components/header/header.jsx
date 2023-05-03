@@ -1,52 +1,76 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './header.css'
 import { useNavigate } from 'react-router-dom';
+import LoggedInContext from '../../Context/LoggedInContext';
 
 
 function Header() {
 
+    const {loggedIn, setLoggedIn} = useContext(LoggedInContext)
 
     let navigate = useNavigate()
     let handleLogout = () => {
       sessionStorage.clear()
       navigate("/login")
+      setLoggedIn(false)
     }
 
     return (
-      <nav className="nav custom-header d-flex flex-row allign-items-center justify-content-between">
-        {sessionStorage.getItem("user") !== undefined &&  JSON.parse(sessionStorage.getItem("privlevel")) === 3  ? 
-          <a href="/"><h3>Placeholder text</h3></a> 
-          : 
-          <h3>Placeholder text</h3>
-        }
-        <div className="d-flex flex-row allign-items-center justify-content-around w-25">
-          {
-            sessionStorage.getItem("user") === undefined ? 
-              (<div><a href='login'>Login</a></div>) 
+      <div className="nav custom-header d-flex flex-row allign-items-center justify-content-between">
+       
+          {sessionStorage.getItem("user") !== undefined &&  JSON.parse(sessionStorage.getItem("privlevel")) === 3  ? 
+            (<a href="/"><h1>Placeholder text</h1></a>)
             : 
-            JSON.parse(sessionStorage.getItem("privlevel")) === 1 ? 
-              (<>
-                <div><a href='/createuser'>Create user</a></div>
-                <div><a onClick={handleLogout}>Logout</a></div>
-              </>) 
-            : 
-            JSON.parse(sessionStorage.getItem("privlevel")) === 2 ? 
-              (<>
-                <div><a href='create'>Create</a></div>
-                <div><a href='modify'>Modify</a></div>
-                <div><a onClick={handleLogout}>Logout</a></div>
-              </>) 
-            : 
-            JSON.parse(sessionStorage.getItem("privlevel")) === 3 ? 
-            (<>
-              <div><a onClick={handleLogout}>Logout</a></div>
-            </>
-            ) : null
+            (<h1>Placeholder text</h1>)
           }
-          
-          
+        
+
+        <div>
+            {
+              JSON.parse(sessionStorage.getItem("privlevel")) === 1 ? 
+                (<>
+                  <button className='btn btn-outline-dark'><a href='/createuser'>Create user</a></button>
+                </>) 
+              : 
+              JSON.parse(sessionStorage.getItem("privlevel")) === 2 ? 
+                (<>
+                  <button className='btn btn-outline-dark m-2'><a href='create'>Create</a></button>
+                  <button className='btn btn-outline-dark'><a href='modify'>Modify</a></button>
+                </>) 
+              : 
+              JSON.parse(sessionStorage.getItem("privlevel")) === 3 ? 
+              (<>
+               
+              </>
+              ) : null
+            }
         </div>
-      </nav>
+        
+           
+      
+          <div className="d-flex flex-column align-items-center justify-content-center">
+            {
+            loggedIn ?
+                (<>
+                  <div>
+                    Welcome {sessionStorage.getItem("username")}!
+                    You are logged in as {JSON.parse(sessionStorage.getItem("privlevel")) === 1 ? 
+                          "an administrator"
+                          : 
+                          JSON.parse(sessionStorage.getItem("privlevel")) === 2 ? 
+                          "a teacher" 
+                          : 
+                          JSON.parse(sessionStorage.getItem("privlevel")) === 3 ? 
+                          "a student" : null}.
+                    
+                  </div>
+                  <button className='btn m-1 btn-outline-dark'><a onClick={handleLogout}>Logout</a></button>
+                </>) : null
+            }
+          </div>
+       
+        
+      </div>
     );
 }
 

@@ -1,52 +1,51 @@
 const express = require('express');
 const router = express.Router();
+const db = require('../db')
+var {body, validationResult, check} = require('express-validator');
 
-
-router.post("/", async (req, res) => {
+router.post("/", [
+    body("personaname").trim().notEmpty(),
+    body("personaname").trim().isLength({
+        min : 1,
+        max : 50
+    }),
+    body("personagender").trim().notEmpty(),
+    body("personaimageid").trim().notEmpty(),
+    body("personainitialprompt").trim().notEmpty().isLength({
+        min : 1,
+        max : 1000
+    }),
+    body("personavoice").trim().notEmpty(),
+    body("personacategoryid").trim().notEmpty(),
+    body("creatorusername").trim().notEmpty().isLength({
+        min : 1,
+        max : 25
+    }),
+], async (req, res) => {
+    let errField = validationResult(req)
+    if(!errField.isEmpty()){
+        res.status(400)
+        res.send("Invalid parameters")
+    }
     try {
-        data = req.body
-        if (data.name.length === 0) {
-            res.status(404)
-            res.send()
-        }
-        if (data.voice === undefined || data.voice.length === 0) {
-            res.status(404)
-            res.send()
-        }
-        if (data.initialPrompt === undefined || data.initialPrompt.length === 0) {
-            res.status(404)
-            res.send()
-        }
-        if (data.imageid === undefined || data.imageid.length === 0) {
-            res.status(404)
-            res.send()
-        }
-        if (data.category === undefined || data.category.length === 0) {
-            res.status(404)
-            res.send()
-        }
-        
-
-       // const sql = `INSERT INTO persona (personaName, personaGender, personaImageId, personaInitialPrompt, personaVoice, personaCategoryId, 
-        //creatorUserName VALUES( ${}, ${} )`;
-
-        //TODO RIJESITI KAD RIJESIS LOGIN DA MOZES DODATI USERNAME
-
+        const sql = `INSERT INTO persona (personaname, personagender, personaimageid, personainitialprompt, personavoice, personacategoryid, creatorusername) VALUES ('${req.body.personaname}', '${req.body.personagender}', ${req.body.personaimageid}, '${req.body.personainitialprompt}', '${req.body.personavoice}', ${req.body.personacategoryid}, '${req.body.creatorusername}')`;
+        console.log(sql)
         try {
             const result = await db.query(sql, []);
+            console.log(result)
             res.json(result.rows);
         }
         catch (e) {
+            console.log("nee")
             console.log(e)
             res.status(400)
-            res.send()
+            res.send(e)
         }
-
         res.status(200);
-        res.send()
+        res.send(result.rows)
     }
     catch (e) {
-        res.status(404)
+        res.status(400)
         res.send()
     }
 });

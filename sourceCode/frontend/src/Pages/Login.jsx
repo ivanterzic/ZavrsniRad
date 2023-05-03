@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {useNavigate} from 'react-router-dom'
 import backend from '../backendAPI';
+import LoggedInContext from '../Context/LoggedInContext';
 
 function Login() {
 
@@ -8,6 +9,7 @@ function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState("");
+  const {loggedIn, setLoggedIn} = useContext(LoggedInContext)
 
 
   let handleSubmit = async () => {
@@ -22,9 +24,10 @@ function Login() {
       setMessage("An error has occured.")
       return
     }
-    if (response.status == 200) {
+    if (response.status === 200) {
       sessionStorage.setItem("username", username)
       sessionStorage.setItem("privlevel", response.data.level)
+      setLoggedIn(true)
       if(response.data.level === 3)
         navigate("/")
       else if(response.data.level === 2)
@@ -33,7 +36,7 @@ function Login() {
         navigate("/createuser")
       else navigate("/")
     }
-    else if (response.status == 201) {
+    else if (response.status === 201) {
       setMessage(response.data)
     }
     else {
@@ -78,7 +81,6 @@ function Login() {
             Login
           </button>
         </div>
-      
     </div>
   );
 }
