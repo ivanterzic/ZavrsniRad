@@ -6,7 +6,7 @@ import './Create.css'
 import toonavatar from 'cartoon-avatar';
 import { useNavigate } from 'react-router-dom';
 import { femaleImages, maleImages } from '../Utils/imageArrays';
-import { sanetizePrompt } from '../Utils/Utils';
+import { sanetizeString } from '../Utils/Utils';
 
 function App() {
   
@@ -75,13 +75,13 @@ function App() {
     }
 
     let sendObj = {
-      personaname : sanetizePrompt(personaName), 
-      personainitialprompt : sanetizePrompt(initialPrompt),
+      personaname : sanetizeString(personaName), 
+      personainitialprompt : sanetizeString(initialPrompt),
       personaimageid : personaImage,
       personagender : gender,
       personavoice : personaVoice,
       personacategoryid : personaCat,
-      creatorusername : sanetizePrompt(sessionStorage.getItem("username"))
+      creatorusername : sanetizeString(sessionStorage.getItem("username"))
     }
     let response
     console.log(sendObj)
@@ -168,14 +168,14 @@ function App() {
           <select name = "gender" className="form-select" onChange={(e) => {
             setGender(e.target.value)
           }}>
-            <option value={"Male"}>Male</option>
-            <option value={"Female"}>Female</option>
+            <option value={"male"}>Male</option>
+            <option value={"female"}>Female</option>
           </select>
         </div>
         <div className="mb-3 w-25">
           <label htmlFor='voice'>Voice:</label>
           <Select id = "voices" name="voices" onChange={handleVoiceChange} isSearchable = {true} value={voice} className='' 
-           options={gender === "Male" ? voices.filter(v => v.gender === "Male") : voices.filter(v => v.gender === "Female")} formatOptionLabel={
+           options={gender === "male" ? voices.filter(v => v.gender === "Male") : voices.filter(v => v.gender === "Female")} formatOptionLabel={
             v => (
               <div key = {v.value} className= 'd-flex flex-row allign-items-center justify-content-between'>
                 <div>
@@ -189,8 +189,8 @@ function App() {
         <div className="mb-3 w-25">
           <label htmlFor='imageid'>Image:</label>
           <Select id = "imageid" name="imageid" onChange={handleImgChange} isSearchable = {true} value={imageid} className='' 
-           options={gender === "Male" ? maleImages : femaleImages} formatOptionLabel={
-            img => (<div><img src={toonavatar.generate_avatar({"gender": gender === "Male" ? "male" : "female", "id": img.label})} height="40px" width="40px"/>{imageid === img.label ? img.label + "✅" : img.label}</div> )
+           options={gender === "male" ? maleImages : femaleImages} formatOptionLabel={
+            img => (<div><img src={toonavatar.generate_avatar({"gender": gender === "male" ? "male" : "female", "id": img.label})} height="40px" width="40px"/>{imageid === img.label ? img.label + "✅" : img.label}</div> )
            }/> 
         </div>
 

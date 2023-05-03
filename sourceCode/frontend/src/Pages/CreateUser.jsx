@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import backend from "../backendAPI";
 import Select from 'react-select'
-import { sanetizePrompt } from "../Utils/Utils";
+import { sanetizeString } from "../Utils/Utils";
 
 const CreateUser = () => {
 
@@ -42,8 +42,8 @@ const CreateUser = () => {
       let response
       try {
         response = await backend.post("/createuser", {
-        "username" : sanetizePrompt(username),
-        "password" : sanetizePrompt(password),
+        "username" : sanetizeString(username),
+        "password" : sanetizeString(password),
         "roleid" : role.value
         })
       }

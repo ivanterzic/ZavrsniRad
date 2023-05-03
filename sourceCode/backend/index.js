@@ -16,6 +16,7 @@ const createRouter = require('./routes/create.routes')
 const loginRouter = require('./routes/login.routes')
 const rolesRouter = require('./routes/roles.routes')
 const createuserRouter = require('./routes/createuser.routes')
+const editRouter = require('./routes/edit.routes')
 
 app.options('/', cors)
 app.use(express.urlencoded({ extended: true }));
@@ -44,6 +45,7 @@ app.use('/create', createRouter);
 app.use('/login', loginRouter);
 app.use('/roles', rolesRouter)
 app.use('/createuser', createuserRouter)
+app.use('/edit', editRouter)
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

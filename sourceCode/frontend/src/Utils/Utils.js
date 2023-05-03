@@ -22,6 +22,6 @@ export function loader(e) {
     }, 300);
 }
 
-export function sanetizePrompt(prompt){
+export function sanetizeString(prompt){
   return prompt.replace("'", "''")
 }

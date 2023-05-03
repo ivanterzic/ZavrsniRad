@@ -6,6 +6,7 @@ import './Create.css'
 import toonavatar from 'cartoon-avatar';
 import { useNavigate } from 'react-router-dom';
 import { femaleImages, maleImages } from '../Utils/imageArrays';
+import { sanetizeString } from '../Utils/Utils';
 
 function App() {
   
@@ -18,14 +19,13 @@ function App() {
   const [initialPrompt, setInitialPrompt] = useState("")
   const [imageid, setImageId] = useState("")
   const [category, setCategory] = useState("");
-  const [promptEdited, setPromptEdited] = useState(false)
   const [message, setMessage] = useState("")
+  const navigate = useNavigate
+
   const [persona, setPersona] = useState("")
   const [personaArray, setPersonaArray] = useState([])
 
-  const navigate = useNavigate()
-
-  
+  const [personaSelected, setPersonaSelected] = useState(false)
 
   async function fillData(){
     try {
@@ -33,18 +33,28 @@ function App() {
       setVoices(response.data.map(voice => ({
         value : voice.name, language : voice.language, sample : voice.sample, gender : voice.gender
       })));
-      response = await backend.get("/personadata");
-      setPersonaArray(response.data.map(p => ({
-        value : p.id, name : p.name
-      })))
       let cat = await backend.get("/categories");
       setCategories(cat.data.map(c => ({value : c.id, name : c.name})))
+      response = await backend.post("/personadata/byuser", {
+        username : sessionStorage.getItem("username")
+      });
+      if (response.data.length === 0){
+        setMessage("You have no created personas to edit.")
+      }
+      setPersonaArray(response.data.map(p => ({
+        value : p.id, persona :  p
+      })))
     } catch (e) {
       alert(e);
     } 
   }
 
   const handleClick = async () => {
+    if (JSON.stringify(persona).trim().length === 0) {
+      setMessage("A persona must be selected!")
+      return
+    }
+    
     let personaName = name
     if (personaName.trim().length === 0) {
       setMessage("Name of a persona can't be empty!")
@@ -75,7 +85,7 @@ function App() {
       setMessage("An image must be selected!")
       return
     }
-
+    console.log(category)
     let personaCat = category.value
     if (personaCat === undefined || personaCat.length === 0) {
       setMessage("A category must be selected!")
@@ -83,25 +93,27 @@ function App() {
     }
 
     let sendObj = {
-      personaname : personaName, 
-      personainitialprompt : initialPrompt,
+      id : persona.persona.id,
+      originalpersona: persona.persona.originalpersona,
+      personaname : sanetizeString(personaName), 
+      personainitialprompt : sanetizeString(initialPrompt),
       personaimageid : personaImage,
       personagender : gender,
       personavoice : personaVoice,
       personacategoryid : personaCat,
-      creatorusername : sessionStorage.getItem("username")
+      creatorusername: sanetizeString(sessionStorage.getItem("username"))
     }
     let response
     console.log(sendObj)
     try {
-      response = await backend.post("/create", sendObj)
+      response = await backend.post("/edit", sendObj)
       if (response.status === 400){
         setMessage("An error has occured.")
       }
       else if (response.status === 200) {
-        setMessage("Persona sucessfully created!")
         handleReset();
-        setMessage("Persona successfully created!")
+        setMessage("Persona successfully edited!")
+        fillData()
       }
       else {
         setMessage("An error has occured.")
@@ -114,18 +126,50 @@ function App() {
   }
 
   const handleReset = async () => {
-    setPersona("")
+    setPersona()
     setVoice("")
     setName("") 
     setGender("Male");
-    setInitialPrompt("Provide answers from the perspective of " + name +", **insert a persona description**. " + name + " is eager to answer questions. He is respectful. If asked about emotions, say a random positive emotion. Do not mention you are an AI language model IN ANY CIRCUMSTANCE!")
     setImageId("")
     setCategory("");
-    setPromptEdited(false)
+    setInitialPrompt("")
+    setPersonaSelected(false)
+  }
+
+  const handleDelete = async () => {
+    if (JSON.stringify(persona).trim().length === 0) {
+      setMessage("A persona must be selected!")
+      return
+    }
+    let resp = window.confirm("Are you sure you want to delete this persona?")
+    if (!resp){
+        return
+    }
+    let response
+    try {
+      response = await backend.post("/edit/delete", {id: persona.persona.id})
+      if (response.status === 400){
+        setMessage("An error has occured.")
+      }
+      else if (response.status === 200) {
+        handleReset();
+        setMessage("Persona successfully deleted!")
+        fillData()
+      }
+      else {
+        setMessage("An error has occured.")
+      }
+    } 
+    catch(e){
+      setMessage("An error has occured!")
+    }
   }
 
   const handleImgChange = (val) => {
-    setImageId(val);
+    gender === "male" ? 
+    setImageId(maleImages.filter( i => {if (i.value === val) return i})[0])
+    :
+    setImageId(femaleImages.filter( i => {if (i.value === val) return i})[0])
   };
 
   const handleCatChange = (val) => {
@@ -133,12 +177,19 @@ function App() {
   };
 
   const handleVoiceChange = (val) => {
-    setVoice(val);
+    setVoice(voices.filter( i => {if (i.value === val) return i})[0]);
   };
 
   const handlePersonaChange = (val) => {
+    setPersonaSelected(true)
     setPersona(val);
-
+    setName(val.persona.name)
+    setGender(val.persona.gender)
+    handleImgChange(val.persona.imageid)
+    setInitialPrompt(val.persona.initialprompt)
+    handleVoiceChange(val.persona.voice)
+    setCategory(categories.filter( i => {if (i.value === val.persona.category) return i})[0]);
+   
   };
 
   useEffect(() => {
@@ -154,32 +205,20 @@ function App() {
     catch (e){
       alert("An error has occured!")
     }
- 
-  
+
   }, []);
-
-  useEffect(() => {
-    setInitialPrompt("Provide answers from the perspective of " + name +", **insert a persona description**. " + name + " is eager to answer questions. He is respectful. If asked about emotions, say a random positive emotion. Do not mention you are an AI language model!")
-  }, [name]);
-
-  useEffect(()=>{
-    setVoice("")
-    setImageId("")
-  }, [gender])
-
   return (
     <div className='container-fluid d-flex flex-column align-items-center justify-content-center p-4'> 
-        <h2>Persona variation creation</h2>
+        <h2>Persona edit</h2>
         <h6>{message}</h6>
-
         <div className="mb-3 w-25">
           <label htmlFor='voice'>Persona picker:</label>
           <Select id = "persona" name="persona" onChange={handlePersonaChange} isSearchable = {true} value={persona} className='' 
            options={personaArray} formatOptionLabel={
-            v => (
-              <div key = {{id: v.value, name: v.name} } className= 'd-flex flex-row allign-items-center justify-content-between'>
+            p => (
+              <div key = {p.id} className= 'd-flex flex-row allign-items-center justify-content-between'>
                 <div>
-                  {v.name}
+                  {p.persona.name}
                 </div> 
               </div>
             )
@@ -188,22 +227,24 @@ function App() {
 
         <div className="mb-3 w-25">
           <label htmlFor='persona'>Name:</label>
-          <input name="name" disabled={promptEdited} id = "name" className='form-control' type="text" value={name} onChange={e => setName(e.target.value)}/>
+          <input name="name" disabled={!personaSelected} id = "name" className='form-control' type="text" value={name} onChange={e => setName(e.target.value)}/>
         </div>
-      
+        
+
         <div className="mb-3 w-25">
           <label htmlFor='gender'>Gender:</label>
-          <select name = "gender" className="form-select" onChange={(e) => {
+          <select name = "gender" className="form-select" disabled={!personaSelected} value={gender} onChange={(e) => {
             setGender(e.target.value)
           }}>
-            <option value={"Male"}>Male</option>
-            <option value={"Female"}>Female</option>
+            <option value={"male"}>Male</option>
+            <option value={"female"}>Female</option>
           </select>
         </div>
+
         <div className="mb-3 w-25">
           <label htmlFor='voice'>Voice:</label>
-          <Select id = "voices" name="voices" onChange={handleVoiceChange} isSearchable = {true} value={voice} className='' 
-           options={gender === "Male" ? voices.filter(v => v.gender === "Male") : voices.filter(v => v.gender === "Female")} formatOptionLabel={
+          <Select isDisabled={!personaSelected} id = "voices" name="voices" onChange={handleVoiceChange} isSearchable = {true} value={voice} className='' 
+           options={gender === "male" ? voices.filter(v => v.gender === "Male") : voices.filter(v => v.gender === "Female")} formatOptionLabel={
             v => (
               <div key = {v.value} className= 'd-flex flex-row allign-items-center justify-content-between'>
                 <div>
@@ -216,15 +257,15 @@ function App() {
         
         <div className="mb-3 w-25">
           <label htmlFor='imageid'>Image:</label>
-          <Select id = "imageid" name="imageid" onChange={handleImgChange} isSearchable = {true} value={imageid} className='' 
-           options={gender === "Male" ? maleImages : femaleImages} formatOptionLabel={
-            img => (<div><img src={toonavatar.generate_avatar({"gender": gender === "Male" ? "male" : "female", "id": img.label})} height="40px" width="40px"/>{imageid === img.label ? img.label + "✅" : img.label}</div> )
+          <Select isDisabled={!personaSelected} id = "imageid" name="imageid" onChange={handleImgChange} isSearchable = {true} value={imageid} className='' 
+           options={maleImages} formatOptionLabel={
+            img => (<div><img src={toonavatar.generate_avatar({"gender": gender, "id": img.label})} height="40px" width="40px"/>{imageid === img.label ? img.label + "✅" : img.label}</div> )
            }/> 
         </div>
 
         <div className="mb-3 w-25">
           <label htmlFor='category'>Category:</label>
-          <Select id = "imageid" name="imageid" onChange={handleCatChange} isSearchable={false} value={category} className='' 
+          <Select id = "imageid" name="imageid" isDisabled={!personaSelected} onChange={handleCatChange} isSearchable={false} value={category} className='' 
            options={categories} formatOptionLabel={
             c => (<div>{c.value}. {c.name}</div> )
            }/> 
@@ -235,10 +276,9 @@ function App() {
           
         </div>
         <div className='container-fluid d-flex flex-column align-items-center w-50'>
-            <textarea id = "converted-speech" className='form-control' rows={5}
+            <textarea id = "converted-speech" disabled={!personaSelected} className='form-control' rows={5}
               value={initialPrompt}
               onChange={(event) => {
-                setPromptEdited(true)
                 setInitialPrompt(event.target.value)             
               }}
             />
@@ -246,13 +286,12 @@ function App() {
           </div>
        
         <div className='container-fluid d-flex flex-row align-items-center justify-content-center w-25 p-4'>
-          <button className='btn btn-success' onClick={handleClick}>Submit</button>
+          <button className='btn btn-success' disabled={!personaSelected} onClick={handleClick}>Submit</button>
           <button className='btn btn-light' onClick={handleReset}>Reset</button>
+          <button className='btn btn-danger' disabled={!personaSelected} onClick={handleDelete}>Delete</button>
         </div>
       </div>
       
   );
 }
-
-
 export default App;

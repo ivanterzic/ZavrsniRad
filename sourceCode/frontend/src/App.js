@@ -10,6 +10,7 @@ import Modify from './Pages/Modify';
 import Create from './Pages/Create'
 import NoAccess from './Pages/NoAccess';
 import CreateUser from './Pages/CreateUser';
+import Edit from './Pages/Edit'
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import {RadioProvider} from './Context/RadioContext';
@@ -40,6 +41,7 @@ function App() {
                         <Route path ="login" element={<Login loggedIn = {loggedIn} setLoggedIn = {setLoggedIn}/>} />
                         <Route path="modify" element={<Modify />} />
                         <Route path="create" element={<Create />} />
+                        <Route path="edit" element={<Edit />} />
                         <Route path="createuser" element={<CreateUser />} />
                         <Route path="noaccess" element={<NoAccess />} />
                         <Route path="*" element={<NoPage />}>

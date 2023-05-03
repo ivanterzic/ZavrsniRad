@@ -6,7 +6,7 @@ import './Create.css'
 import toonavatar from 'cartoon-avatar';
 import { useNavigate } from 'react-router-dom';
 import { femaleImages, maleImages } from '../Utils/imageArrays';
-import { sanetizePrompt } from '../Utils/Utils';
+import { sanetizeString } from '../Utils/Utils';
 
 function App() {
   
@@ -19,6 +19,7 @@ function App() {
   const [message, setMessage] = useState("")
   const [persona, setPersona] = useState("")
   const [personaArray, setPersonaArray] = useState([])
+  const [personaSelected, setPersonaSelected] = useState(false)
   const navigate = useNavigate()
 
   async function fillData(){
@@ -68,7 +69,7 @@ function App() {
     }
     let sendObj = {
       personaname : name, 
-      personainitialprompt : sanetizePrompt(initialPrompt),
+      personainitialprompt : sanetizeString(initialPrompt),
       personaimageid : imageid.value,
       personagender : gender,
       personavoice : voice.value,
@@ -83,9 +84,9 @@ function App() {
         setMessage("An error has occured.")
       }
       else if (response.status === 200) {
-        setMessage("Persona sucessfully created!")
         handleReset();
-        setMessage("Persona successfully created!")
+        setMessage("Modified persona sucessfully created!")
+        fillData()
       }
       else {
         setMessage("An error has occured.")
@@ -104,11 +105,11 @@ function App() {
     setGender("");
     setInitialPrompt("")
     setImageId("")
+    setPersonaSelected(false)
   }
 
   const handleImgChange = (val) => {
-    console.log(val)
-    console.log(maleImages)
+    
     gender === "male" ? 
     setImageId(maleImages.filter( i => {if (i.value === val) return i})[0])
     :
@@ -117,7 +118,6 @@ function App() {
 
   const handleVoiceChange = (val) => {
     setVoice(voices.filter( i => {if (i.value === val) return i})[0]);
-    
   };
 
   const handlePersonaChange = (val) => {
@@ -127,6 +127,7 @@ function App() {
     handleVoiceChange(val.persona.voice)
     handleImgChange(val.persona.imageid)
     setInitialPrompt(val.persona.initialprompt)
+    setPersonaSelected(true)
   };
 
   useEffect(() => {
@@ -167,14 +168,14 @@ function App() {
 
         <div className="mb-3 w-25">
           <label htmlFor='persona'>Name:</label>
-          <input name="name" id = "name" className='form-control' type="text" value={name} onChange={e => setName(e.target.value)}/>
+          <input name="name" id = "name" disabled={!personaSelected} className='form-control' type="text" value={name} onChange={e => setName(e.target.value)}/>
         </div>
         <div className="mb-3 w-25">
           <label htmlFor='voice'>Voice:</label>
-          <Select id = "voices" name="voices" onChange={handleVoiceChange} isSearchable = {true} value={voice} className='' 
-           options={voices} formatOptionLabel={
+          <Select isDisabled={!personaSelected} id = "voices" name="voices" onChange={handleVoiceChange} isSearchable = {true} value={voice} className='' 
+           options={gender === "male" ? voices.filter(v => v.gender === "Male") : voices.filter(v => v.gender === "Female")} formatOptionLabel={
             v => (
-              <div key = {v} className= 'd-flex flex-row allign-items-center justify-content-between' hidden={(gender === "male" && v.gender === "male") || (gender === "female" && v.gender === "Female") ? false : true}>
+              <div key = {v.value} className= 'd-flex flex-row allign-items-center justify-content-between'>
                 <div>
                   {v.value}, {v.language},  <a href={v.sample}>Sample👈</a>
                 </div> 
@@ -185,7 +186,7 @@ function App() {
         
         <div className="mb-3 w-25">
           <label htmlFor='imageid'>Image:</label>
-          <Select id = "imageid" name="imageid" onChange={handleImgChange} isSearchable = {true} value={imageid} className='' 
+          <Select isDisabled={!personaSelected} id = "imageid" name="imageid" onChange={handleImgChange} isSearchable = {true} value={imageid} className='' 
            options={maleImages} formatOptionLabel={
             img => (<div><img src={toonavatar.generate_avatar({"gender": gender, "id": img.label})} height="40px" width="40px"/>{imageid === img.label ? img.label + "✅" : img.label}</div> )
            }/> 
@@ -195,7 +196,7 @@ function App() {
           
         </div>
         <div className='container-fluid d-flex flex-column align-items-center w-50'>
-            <textarea id = "converted-speech" className='form-control' rows={5}
+            <textarea disabled={!personaSelected} id = "converted-speech" className='form-control' rows={5}
               value={initialPrompt}
               onChange={(event) => {
                 setInitialPrompt(event.target.value)             
@@ -206,7 +207,7 @@ function App() {
           </div>
        
         <div className='container-fluid d-flex flex-row align-items-center justify-content-center w-25 p-4'>
-          <button className='btn btn-success' onClick={handleClick}>Submit</button>
+          <button disabled={!personaSelected} className='btn btn-success' onClick={handleClick}>Submit</button>
           <button className='btn btn-light' onClick={handleReset}>Reset</button>
         </div>
       </div>

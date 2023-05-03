@@ -32,7 +32,8 @@ function Header(props) {
               JSON.parse(sessionStorage.getItem("privlevel")) === 2 ? 
                 (<>
                   <button className='btn btn-outline-dark m-2'><a href='create'>Create</a></button>
-                  <button className='btn btn-outline-dark'><a href='modify'>Modify</a></button>
+                  <button className='btn btn-outline-dark m-2'><a href='modify'>Modify</a></button>
+                  <button className='btn btn-outline-dark m-2'><a href='edit'>Edit</a></button>
                 </>) 
               : 
               JSON.parse(sessionStorage.getItem("privlevel")) === 3 ? 
