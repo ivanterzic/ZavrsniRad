@@ -1,29 +1,20 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import UserContext from '../Context/UserContext';
 
 function App() {
   
   const navigate = useNavigate()
-  const {user, setUser} = useContext(UserContext)
-
   useEffect(() => {
-    if (user === undefined) {
+    if (sessionStorage.getItem("user") === undefined) {
       navigate('/login')
     }
-    else if (user["privlevel"] !== 2){
+    else if (JSON.parse(sessionStorage.getItem("privlevel")) !== 2){
       navigate('/noaccess')
     }
-
-  
- 
-  
   }, []);
 
   return (
-
-
       <div className="container-fluid d-flex flex-column align-items-center justify-content-center w-50 p-4">
         <h2>Persona profile creation</h2>
 

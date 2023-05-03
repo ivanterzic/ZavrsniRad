@@ -5,11 +5,9 @@ import backend from '../backendAPI';
 import './Create.css'
 import toonavatar from 'cartoon-avatar';
 import { useNavigate } from 'react-router-dom';
-import UserContext from '../Context/UserContext';
 
 function App() {
   
-  const {user, setUser} = useContext(UserContext)
 
   const [voices, setVoices] = useState([]); //used for an array of specific persona a user is able to select
   const [categories, setCategories] = useState([]);
@@ -143,10 +141,10 @@ function App() {
   };
 
   useEffect(() => {
-    if (user === undefined) {
+    if (sessionStorage.getItem("user") === undefined) {
       navigate('/login')
     }
-    else if (user["privlevel"] !== 2){
+    else if (JSON.parse(sessionStorage.getItem("privlevel")) !== 2){
       navigate('/noaccess')
     }
 

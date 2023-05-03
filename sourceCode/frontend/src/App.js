@@ -19,13 +19,11 @@ import {ChatDataProvider} from './Context/ChatDataContext';
 import {DisabledProvider} from './Context/DisabledContext';
 import { UserTextInputProvider } from './Context/UserInputContext';
 import NoPage from './Pages/NoPage';
-import { UserProvider } from './Context/UserContext';
 /*"start": "PORT=4300 react-scripts start",*/
 function App() {
 
   return (
   <>
-  <UserProvider>
     <UserTextInputProvider>
       <DisabledProvider>
         <ChatDataProvider>
@@ -49,8 +47,6 @@ function App() {
         </ChatDataProvider>
       </DisabledProvider>
     </UserTextInputProvider>
-  </UserProvider>
-    
   </>
     
   );
