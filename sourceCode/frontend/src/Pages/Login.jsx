@@ -27,7 +27,7 @@ function Login(props) {
     if (response.status === 200) {
       sessionStorage.setItem("username", username)
       sessionStorage.setItem("privlevel", response.data.level)
-      props.setLoggedIn(true)
+      await props.setLoggedIn(true)
       if(response.data.level === 3)
         navigate("/")
       else if(response.data.level === 2)

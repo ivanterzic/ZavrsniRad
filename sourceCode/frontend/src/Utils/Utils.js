@@ -27,7 +27,7 @@ export function sanetizeString(prompt){
 }
 
 export function checkPrivLevel(level, navigate){
-  if (sessionStorage.getItem("user") === null) {
+  if (sessionStorage.getItem("user") === undefined) {
     navigate('/login')
   }
   else if (JSON.parse(sessionStorage.getItem("privlevel")) !== level){
