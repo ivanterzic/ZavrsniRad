@@ -6,7 +6,7 @@ import './Create.css'
 import toonavatar from 'cartoon-avatar';
 import { useNavigate } from 'react-router-dom';
 import { femaleImages, maleImages } from '../Utils/imageArrays';
-import { sanetizeString } from '../Utils/Utils';
+import { checkPrivLevel, sanetizeString } from '../Utils/Utils';
 
 function App() {
   
@@ -131,12 +131,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (sessionStorage.getItem("user") === undefined) {
-      navigate('/login')
-    }
-    else if (JSON.parse(sessionStorage.getItem("privlevel")) !== 2){
-      navigate('/noaccess')
-    }
+    checkPrivLevel(2, navigate)
     try {
       fillData()
     }

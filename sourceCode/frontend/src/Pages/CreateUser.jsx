@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import backend from "../backendAPI";
 import Select from 'react-select'
-import { sanetizeString } from "../Utils/Utils";
+import { sanetizeString, checkPrivLevel } from "../Utils/Utils";
 
 const CreateUser = () => {
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [repeatPpassword, setRepeatPassword] = useState("")
@@ -79,12 +79,7 @@ const CreateUser = () => {
     };
 
     useEffect(()=>{
-      if (sessionStorage.getItem("user") === undefined) {
-        navigate('/login')
-      }
-      else if (JSON.parse(sessionStorage.getItem("privlevel")) !== 1){
-        navigate('/noaccess')
-      }
+      checkPrivLevel(1, navigate)
       fetchRoles()
     }, [])
 

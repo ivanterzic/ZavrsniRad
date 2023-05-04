@@ -1,4 +1,3 @@
-import React from 'react';
 import {useEffect, useState, useContext} from "react";
 import Select from 'react-select'
 import backend from '../backendAPI';
@@ -6,7 +5,7 @@ import './Create.css'
 import toonavatar from 'cartoon-avatar';
 import { useNavigate } from 'react-router-dom';
 import { femaleImages, maleImages } from '../Utils/imageArrays';
-import { sanetizeString } from '../Utils/Utils';
+import { sanetizeString, checkPrivLevel } from '../Utils/Utils';
 
 function App() {
   
@@ -21,7 +20,7 @@ function App() {
   const [category, setCategory] = useState("");
   const [promptEdited, setPromptEdited] = useState(false)
   const [message, setMessage] = useState("")
-  const navigate = useNavigate
+  const navigate = useNavigate()
 
   async function fillData(){
     try {
@@ -128,20 +127,13 @@ function App() {
   };
 
   useEffect(() => {
-    if (sessionStorage.getItem("user") === undefined) {
-      navigate('/login')
-    }
-    else if (JSON.parse(sessionStorage.getItem("privlevel")) !== 2){
-      navigate('/noaccess')
-    }
+    checkPrivLevel(2, navigate);
     try {
       fillData()
     }
     catch (e){
       alert("An error has occured!")
     }
- 
-  
   }, []);
 
   useEffect(() => {

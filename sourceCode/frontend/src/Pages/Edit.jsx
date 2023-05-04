@@ -1,12 +1,11 @@
-import React from 'react';
-import {useEffect, useState, useContext} from "react";
+import {useEffect, useState} from "react";
 import Select from 'react-select'
 import backend from '../backendAPI';
 import './Create.css'
 import toonavatar from 'cartoon-avatar';
 import { useNavigate } from 'react-router-dom';
 import { femaleImages, maleImages } from '../Utils/imageArrays';
-import { sanetizeString } from '../Utils/Utils';
+import { checkPrivLevel, sanetizeString } from '../Utils/Utils';
 
 function App() {
   
@@ -20,7 +19,7 @@ function App() {
   const [imageid, setImageId] = useState("")
   const [category, setCategory] = useState("");
   const [message, setMessage] = useState("")
-  const navigate = useNavigate
+  const navigate = useNavigate()
 
   const [persona, setPersona] = useState("")
   const [personaArray, setPersonaArray] = useState([])
@@ -193,12 +192,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (sessionStorage.getItem("user") === undefined) {
-      navigate('/login')
-    }
-    else if (JSON.parse(sessionStorage.getItem("privlevel")) !== 2){
-      navigate('/noaccess')
-    }
+    checkPrivLevel(2, navigate)
     try {
       fillData()
     }

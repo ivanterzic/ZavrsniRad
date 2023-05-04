@@ -11,6 +11,7 @@ import toonavatar from 'cartoon-avatar';
 import Conversation from '../Components/Conversation/Conversation';
 import backend from '../backendAPI';
 import { useNavigate } from 'react-router-dom';
+import { checkPrivLevel } from '../Utils/Utils';
 
 function App() {
   
@@ -42,12 +43,7 @@ function App() {
   }
 
   useEffect(() => {
-    if (sessionStorage.getItem("user") === undefined) {
-      navigate('/login')
-    }
-    else if (JSON.parse(sessionStorage.getItem("privlevel")) !== 3){
-      navigate('/noaccess')
-    }
+    checkPrivLevel(3, navigate)
     try {
       fillData()
     }

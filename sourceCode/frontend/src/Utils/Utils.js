@@ -25,3 +25,12 @@ export function loader(e) {
 export function sanetizeString(prompt){
   return prompt.replace("'", "''")
 }
+
+export function checkPrivLevel(level, navigate){
+  if (sessionStorage.getItem("user") === null) {
+    navigate('/login')
+  }
+  else if (JSON.parse(sessionStorage.getItem("privlevel")) !== level){
+    navigate('/noaccess')
+  }
+}
