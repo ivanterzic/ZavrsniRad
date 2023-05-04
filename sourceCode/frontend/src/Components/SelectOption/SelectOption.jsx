@@ -29,26 +29,24 @@ function SelectOption(props) {
                     <RadioButton name = "Conversation" image = {conversation}></RadioButton>
                 </div>
             </div>
-            <div className='container-fluid d-flex flex-row align-items-center justify-content-around '>
-            
-
+            <div className='container-fluid d-flex flex-row align-items-center justify-content-center'>
                 {radio !== "Conversation" ? 
                 <>
-                    <div className="container-fluid d-flex flex-row align-items-center justify-content-center flex-wrap">
+                    
                     <h4>Select a persona:</h4>
                     <div className="p-3">
                         <PersonaSelector data = {props.data} categories = {props.categories}></PersonaSelector>
                     </div>
-                    </div>
+                    
                     <button className='btn btn-success' disabled= {!persona ? true : false} onClick={e => {
-                        let resp = window.gconfirm("Are you sure you want to reset the chat? Current chat data will be deleted! ")
+                        let resp = window.confirm("Are you sure you want to reset the chat? Current chat data will be deleted! ")
                         if (resp){
                             chatData.length = 0
                             setChatData([])
                             sendInitial(chatData, setChatData, JSON.parse(persona).initialPrompt + " The questions will be provided by the user in the following messages.", () => {}, () => {})
                         }
                         
-                    }}>Reset</button>
+                    }}>Reset conversation</button>
                 </> : null         
                 }
             </div>

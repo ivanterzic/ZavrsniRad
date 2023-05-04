@@ -12,7 +12,7 @@ export async function sendCompletionRequest(chatData) {
 };
 
 export async function sendStopCompletionRequest(chatData, stop) {
-  //await sleep(20000)
+  await sleep(20000)
   let response = await backend.post("/chatcompletion/withstop", {
     "chatData" : chatData,
     "stop" : stop

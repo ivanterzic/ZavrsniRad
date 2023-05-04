@@ -12,7 +12,7 @@ function PersonaSelector(props) {
 
     return (
         <div className='d-flex flex-row flex-wrap align-items-center justify-content-around'>
-            <select id = "persona-select" name = "persona" className="selectpicker p-2" onChange={(e)=>{
+            <select id = "persona-select" name = "persona" className="selectpicker p-2 selector" onChange={(e)=>{
                 setValue(e.target.value)
         
             }}>

@@ -12,6 +12,7 @@ export function generateUniqueId() {
 }
 
 export function loader(e) {
+  try{
     let loadInterval
     e.textContent = 'Typing'
     loadInterval = setInterval(() => {
@@ -20,6 +21,8 @@ export function loader(e) {
           e.textContent = 'Typing';
         }
     }, 300);
+  }
+  catch{} 
 }
 
 export function sanetizeString(prompt){

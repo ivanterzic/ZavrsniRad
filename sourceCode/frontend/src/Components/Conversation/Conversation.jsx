@@ -143,7 +143,7 @@ function Conversation(props) {
     <>
         <div className='container-fluid d-flex flex-row align-items-center justify-content-center'>
             <div className='d-flex flex-row flex-wrap align-items-center justify-content-around'>
-                <select id = "persona1-select" name = "persona" className="selectpicker p-2" disabled = {conversationHappening} onChange={(e)=>{
+                <select id = "persona1-select" name = "persona" className="selectpicker p-2 selector" disabled = {conversationHappening} onChange={(e)=>{
                     setPersona1(JSON.parse(e.target.value))}}>
                     <option selected hidden value={undefined}>Select a persona...</option>
                     {props.categories.map((c) => {
@@ -159,7 +159,7 @@ function Conversation(props) {
                 </select>  
             </div>
             <div className='d-flex flex-row flex-wrap align-items-center justify-content-around'>
-                <select id = "persona2-select" name = "persona" className="selectpicker p-2" disabled = {conversationHappening} onChange={(e)=>{
+                <select id = "persona2-select" name = "persona" className="selectpicker p-2 selector" disabled = {conversationHappening} onChange={(e)=>{
                     setPersona2(JSON.parse(e.target.value))}}>
                     <option selected hidden value={undefined}>Select a persona...</option>
                     {props.categories.map((c) => {
@@ -189,20 +189,21 @@ function Conversation(props) {
             <div className='chat-wrapper'>
                 <div  id = "chat-header" className='border-bottom chat-header d-flex flex-row justify-content-between'>
                     <div>{persona1 ? 
-                        <div className='container-fluid d-flex flex-row align-items-center justify-content-center'>
+                        <div className='container-fluid d-flex flex-row align-items-center justify-content-center persona-desc'>
                             <ProfileAvatar image = {persona1.imageurl}></ProfileAvatar>
-                            <div className='m-3'>
-                                <span>{persona1.name}</span> 
+                            <div className='m-2 container-fluid d-flex flex-column align-items-start justify-content-start persona-desc'>
+                                <div><h6 className='align-self-start'>{persona1.name}</h6> </div>
+                                <div id='p1-typing'></div>
                             </div>
-                            <div id='p1-typing'></div>
+                            
                         </div>
                         : null}
                     </div>
                     <div>{persona2 ? 
-                        <div className='container-fluid d-flex flex-row align-items-center justify-content-center'>
-                            <div id='p2-typing'></div>
-                            <div className='m-3'>
-                                <span>{persona2.name}</span> 
+                        <div className='container-fluid d-flex flex-row align-items-center justify-content-center persona-desc'>
+                            <div className='m-2 container-fluid d-flex flex-column align-items-end justify-content-start persona-desc'>
+                                <div><h6 className='align-self-start'>{persona2.name}</h6> </div>
+                                <div id='p2-typing' className='align-self-start'></div>
                             </div>
                             <ProfileAvatar image = {persona2.imageurl}></ProfileAvatar>
                         </div> 

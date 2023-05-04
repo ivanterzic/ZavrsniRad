@@ -41,12 +41,12 @@ function Chatbot() {
   return (
     <div className='container-fluid d-flex flex-column align-items-center justify-content-center'>
       <div className='chat-wrapper'>
-        <div  id = "chat-header" className='border-bottom chat-header d-flex flex-row justify-content-between'>
+        <div className='border-bottom chat-header d-flex flex-row justify-content-between'>
             <div>{!personaObj ? "No persona selected!" :  
-              <div className='container-fluid d-flex flex-row align-items-center justify-content-center'>
+              <div className='container-fluid d-flex flex-row align-items-center justify-content-center persona-desc'>
                   <ProfileAvatar image = {personaObj.imageurl}></ProfileAvatar>
-                  <div className='m-3'>
-                      <span>{personaObj.name}</span> 
+                  <div id = "chat-header" className='m-2 container-fluid d-flex flex-column align-items-start justify-content-start persona-desc'>
+                      <div><h6 className='align-self-start'>{personaObj.name}</h6> </div>
                   </div>
               </div>
             }</div>
