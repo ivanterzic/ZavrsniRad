@@ -7,14 +7,12 @@ import './RadioButton.css'
 function RadioButton(props) {
 
     const {radio, setRadio} = useContext(RadioContext)
-
+    
     return (
         <div className='d-flex flex-column align-items-center justify-content-center'>
-           
         <input type="radio" className="btn btn-check" name="options" id={props.name} onClick={(e)=>{
-        setRadio(props.name)
-        //console.log("changed")
-        }} selected={radio === props.name ? true : false}></input>
+            setRadio(props.name)
+        }}></input>
         <label className={"btn btn-light mx-3 radio-button"} htmlFor={props.name}>
             <div className='container-fluid d-flex flex-column align-items-center justify-content-center flex-wrap'>
                 <h6>{props.name}</h6>

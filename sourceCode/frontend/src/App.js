@@ -37,7 +37,10 @@ function App() {
                   <Router>
                     <Header loggedIn = {loggedIn} setLoggedIn = {setLoggedIn}></Header>
                     <Routes>
-                        <Route path="/" element={<Body />} />
+                        {loggedIn ? 
+                          <Route path="/" element={<Body />} /> :
+                          <Route path ="/" element={<Login loggedIn = {loggedIn} setLoggedIn = {setLoggedIn}/>} />
+                        }
                         <Route path ="login" element={<Login loggedIn = {loggedIn} setLoggedIn = {setLoggedIn}/>} />
                         <Route path="modify" element={<Modify />} />
                         <Route path="create" element={<Create />} />
@@ -55,7 +58,7 @@ function App() {
       </UserTextInputProvider>
 
   </>
-    
+    //
   );
 }
 

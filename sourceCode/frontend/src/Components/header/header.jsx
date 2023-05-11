@@ -14,7 +14,6 @@ function Header(props) {
 
     return (
       <div className="nav custom-header d-flex flex-row allign-items-center justify-content-between">
-       
           {sessionStorage.getItem("user") !== undefined &&  JSON.parse(sessionStorage.getItem("privlevel")) === 3  ? 
             (<a href="/"><h1>Placeholder text</h1></a>)
             : 

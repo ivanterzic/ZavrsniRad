@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {useNavigate} from 'react-router-dom'
 import backend from '../backendAPI';
 
@@ -43,7 +43,19 @@ function Login(props) {
       setMessage("An error has occured.")
     }
 
+
   }
+
+  useEffect((()=>{
+    if(sessionStorage.getItem("user") !== undefined){
+      if(sessionStorage.getItem("privlevel") === 3)
+        navigate("/")
+      else if(sessionStorage.getItem("privlevel") === 2)
+        navigate("/create")
+      else if(sessionStorage.getItem("privlevel") === 1)
+        navigate("/createuser")
+    }
+  }),[])
 
   return (
     <div className='container-fluid d-flex flex-column align-items-center justify-content-center p-4'> 
