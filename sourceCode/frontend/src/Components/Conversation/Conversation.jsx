@@ -28,7 +28,7 @@ function Conversation(props) {
     const [awaitingMessage, setAwaitingMessage] = useState(false)
 
     let pendingText = "";
-
+    
     async function continueConversation(){ 
         if(conversationHappening === true){
             await setTimeout(() => {}, 500)

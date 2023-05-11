@@ -127,7 +127,7 @@ const sql_insert_categories = `INSERT INTO categories
     (6, 'Modified')
 `;
 
-/*const sql_insert_users*/
+const sql_insert_users = `INSERT INTO users (username, password, roleid) VALUES ('admin', 'admin123', 1)`
 /*const sql_insert_log*/
 
 const sql_insert_persona =  `INSERT INTO persona 
@@ -165,7 +165,7 @@ let tables = [
 let table_data = [
     sql_insert_roles,
     sql_insert_categories,
-    undefined, 
+    sql_insert_users, 
     undefined,
     sql_insert_persona
 ]
