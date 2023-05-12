@@ -92,6 +92,20 @@ function App() {
         setMessage("Persona sucessfully created!")
         handleReset();
         setMessage("Persona successfully created!")
+        try {
+          let res2 = await backend.post('/log', {
+            type : "persona_created",
+            data : JSON.stringify(
+              {
+                "persona_created" : sendObj
+              }
+            ),
+            username : JSON.parse(sessionStorage.getItem("username"))
+          })
+        }
+        catch (e) {
+          console.log("Action couldn't be logged.")
+        }
       }
       else {
         setMessage("An error has occured.")

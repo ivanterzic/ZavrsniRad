@@ -112,6 +112,20 @@ function App() {
       else if (response.status === 200) {
         handleReset();
         setMessage("Persona successfully edited!")
+        try {
+          let res2 = await backend.post('/log', {
+            type : "persona_edited",
+            data : JSON.stringify(
+              {
+                "persona_edited" : sendObj
+              }
+            ),
+            username : JSON.parse(sessionStorage.getItem("username"))
+          })
+        }
+        catch (e) {
+          console.log("Action couldn't be logged.")
+        }
         fillData()
       }
       else {
@@ -153,6 +167,20 @@ function App() {
       else if (response.status === 200) {
         handleReset();
         setMessage("Persona successfully deleted!")
+        try {
+          let res2 = await backend.post('/log', {
+            type : "persona_deleted",
+            data : JSON.stringify(
+              {
+                "persona_deleted" : persona.persona
+              }
+            ),
+            username : JSON.parse(sessionStorage.getItem("username"))
+          })
+        }
+        catch (e) {
+          console.log("Action couldn't be logged.")
+        }
         fillData()
       }
       else {

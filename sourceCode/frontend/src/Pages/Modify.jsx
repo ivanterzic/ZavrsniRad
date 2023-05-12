@@ -86,6 +86,20 @@ function App() {
       else if (response.status === 200) {
         handleReset();
         setMessage("Modified persona sucessfully created!")
+        try {
+          let res2 = await backend.post('/log', {
+            type : "persona_modified",
+            data : JSON.stringify(
+              {
+                "persona_modified" : sendObj
+              }
+            ),
+            username : JSON.parse(sessionStorage.getItem("username"))
+          })
+        }
+        catch (e) {
+          console.log("Action couldn't be logged.")
+        }
         fillData()
       }
       else {

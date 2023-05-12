@@ -52,6 +52,24 @@ const CreateUser = () => {
         return
       }
       setMessage("New user successfuly added!")
+      try {
+        let res2 = await backend.post('/log', {
+          type : "user_created",
+          data : JSON.stringify(
+            {
+              "user_created" : {
+                "username" : sanetizeString(username),
+                "password" : sanetizeString(password),
+                "roleid" : role.value
+                }
+            }
+          ),
+          username : JSON.parse(sessionStorage.getItem("username"))
+        })
+      }
+      catch (e) {
+        console.log("Action couldn't be logged.")
+      }
       handleReset()
     }
     let handleReset = () => {

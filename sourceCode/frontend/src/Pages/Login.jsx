@@ -10,8 +10,6 @@ function Login(props) {
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState("");
  
-
-
   let handleSubmit = async () => {
     let response
     try {
@@ -25,6 +23,16 @@ function Login(props) {
       return
     }
     if (response.status === 200) {
+      try {
+        let res2 = await backend.post('/log', {
+          type : "login",
+          data : JSON.stringify("User has logged in."),
+          username : username
+        })
+      }
+      catch (e) {
+        console.log("Action couldn't be logged.")
+      }
       sessionStorage.setItem("username", JSON.stringify(username))
       sessionStorage.setItem("privlevel", JSON.stringify(response.data.level))
       await props.setLoggedIn(true)

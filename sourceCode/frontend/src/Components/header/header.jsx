@@ -1,12 +1,23 @@
 import React from 'react';
 import './header.css'
+import backend from '../../backendAPI';
 import { useNavigate } from 'react-router-dom';
 
 
 function Header(props) {
 
     let navigate = useNavigate()
-    let handleLogout = () => {
+    let handleLogout = async () => {
+      try {
+        let res2 = await backend.post('/log', {
+          type : "logout",
+          data : JSON.stringify("User has logged out using the logout button."),
+          username : JSON.parse(sessionStorage.getItem("username"))
+        })
+      }
+      catch (e) {
+        console.log("Action couldn't be logged.")
+      }
       sessionStorage.clear()
       navigate("/login")
       props.setLoggedIn(false)
