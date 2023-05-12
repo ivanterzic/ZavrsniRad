@@ -13,7 +13,7 @@ function RadioButton(props) {
         <input type="radio" className="btn btn-check" name="options" id={props.name} onClick={(e)=>{
             setRadio(props.name)
         }}></input>
-        <label className={"btn btn-light mx-3 radio-button"} htmlFor={props.name}>
+        <label className={(props.name === radio ? "btn-light" : "btn-outline-dark") + " btn mx-3 radio-button"} htmlFor={props.name}>
             <div className='container-fluid d-flex flex-column align-items-center justify-content-center flex-wrap'>
                 <h6>{props.name}</h6>
                 <div><img className='radio-img' src={props.image} alt={props.name}></img></div>
