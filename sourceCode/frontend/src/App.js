@@ -21,11 +21,11 @@ import {DisabledProvider} from './Context/DisabledContext';
 import { UserTextInputProvider } from './Context/UserInputContext';
 
 import NoPage from './Pages/NoPage';
-/*"start": "PORT=4300 react-scripts start",*/
+
 function App() {
 
   const [loggedIn, setLoggedIn] = useState(false)
-
+  
   return (
   <>
 
@@ -37,10 +37,7 @@ function App() {
                   <Router>
                     <Header loggedIn = {loggedIn} setLoggedIn = {setLoggedIn}></Header>
                     <Routes>
-                        {loggedIn ? 
-                          <Route path="/" element={<Body />} /> :
-                          <Route path ="/" element={<Login loggedIn = {loggedIn} setLoggedIn = {setLoggedIn}/>} />
-                        }
+                        <Route path="/" element={<Body />} /> 
                         <Route path ="login" element={<Login loggedIn = {loggedIn} setLoggedIn = {setLoggedIn}/>} />
                         <Route path="modify" element={<Modify />} />
                         <Route path="create" element={<Create />} />

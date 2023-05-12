@@ -51,10 +51,10 @@ CREATE TABLE Persona
 const {Pool} = require('pg');
 
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'ZavRad',
-    password: 'bazepodataka',
+    user: 'projektadmin',
+    host: '161.53.18.24',
+    database: 'PersonaApp',
+    password: '5tz89rg5489ohizg',
     port: 5432,
 });
 

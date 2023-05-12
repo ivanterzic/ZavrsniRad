@@ -25,8 +25,8 @@ function Login(props) {
       return
     }
     if (response.status === 200) {
-      sessionStorage.setItem("username", username)
-      sessionStorage.setItem("privlevel", response.data.level)
+      sessionStorage.setItem("username", JSON.stringify(username))
+      sessionStorage.setItem("privlevel", JSON.stringify(response.data.level))
       await props.setLoggedIn(true)
       if(response.data.level === 3)
         navigate("/")
@@ -42,19 +42,11 @@ function Login(props) {
     else {
       setMessage("An error has occured.")
     }
-
-
   }
 
   useEffect((()=>{
-    if(sessionStorage.getItem("user") !== undefined){
-      if(sessionStorage.getItem("privlevel") === 3)
-        navigate("/")
-      else if(sessionStorage.getItem("privlevel") === 2)
-        navigate("/create")
-      else if(sessionStorage.getItem("privlevel") === 1)
-        navigate("/createuser")
-    }
+    sessionStorage.setItem("username", JSON.stringify(null))
+    sessionStorage.setItem("privlevel", JSON.stringify(null))
   }),[])
 
   return (
