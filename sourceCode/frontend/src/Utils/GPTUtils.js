@@ -23,9 +23,13 @@ export async function sendStopCompletionRequest(chatData, stop) {
 export async function sendInitial(chatData, setChatData, prompt, setDisabled, setStatus) {
   setDisabled(false)
   setStatus("Pending")
-  const div = document.createElement("div")
-  document.getElementById("chat-header").appendChild(div)
-  div.innerHTML += "Connecting..."
+  let div
+  if (document.getElementById("chat-header") !== null){
+    div = document.createElement("div")
+    document.getElementById("chat-header").appendChild(div)
+    div.innerHTML += "Connecting..."
+  }
+ 
   setChatData([])
   chatData.push(
     {
@@ -38,7 +42,10 @@ export async function sendInitial(chatData, setChatData, prompt, setDisabled, se
   }])
   setStatus("Active")
   setDisabled(false)
-  div.remove() 
+  if (document.getElementById("chat-header") !== null){
+    div.remove() 
+  }
+  
 }
 
 export async function sendPrompt(chatData, setChatData, userTextInput, setUserTextInput, setDisabled){

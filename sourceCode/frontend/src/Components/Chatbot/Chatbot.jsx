@@ -6,8 +6,10 @@ import ChatDataContext from '../../Context/ChatDataContext';
 import DisabledContext from '../../Context/DisabledContext'
 import UserTextInputContext from '../../Context/UserInputContext';
 import ProfileAvatar from '../ProfileAvatar/ProfileAvatar';
-import { scrollDown, generateUniqueId, loader } from '../../Utils/Utils';
+import { scrollDown, generateUniqueId, loader, sanetizeString } from '../../Utils/Utils';
 import { sendPrompt, sendInitial } from '../../Utils/GPTUtils';
+import LogIdContext from '../../Context/LogIdContext';
+import backend from '../../backendAPI';
 
 function Chatbot() {
   
@@ -15,20 +17,62 @@ function Chatbot() {
   const {userTextInput, setUserTextInput} = useContext(UserTextInputContext)
   const {chatData, setChatData} = useContext(ChatDataContext)
   const {disabled, setDisabled} = useContext(DisabledContext)
-  
+  const {log, setLog} = useContext(LogIdContext)
   const [personaObj, setPersonaObj] = useState();
   const [status, setStatus] = useState("No")
   
+  async function logConversation(){
+    let res
+    if (log === null){
+      try {
+        res = await backend.post('/log', {
+          type : "conversation",
+          data : (JSON.stringify({
+            persona : sanetizeString(JSON.stringify(persona)),
+            chatData : sanetizeString(JSON.stringify(chatData))
+          })),
+          username : JSON.parse(sessionStorage.getItem("username"))
+        })
+        res = res.data[0].logid
+        setLog(res)
+      }
+      catch (e) {
+        console.log("Action couldn't be logged.")
+      }
+    }
+    else {
+      try {
+        res = await backend.post('/log/update_log', {
+          logid : log,
+          data : (JSON.stringify({
+            persona : sanetizeString(JSON.stringify(persona)),
+            chatData : sanetizeString(JSON.stringify(chatData))
+          })),
+        })
+      }
+      catch (e) {
+        console.log("Action couldn't be logged.")
+      }
+    }
+  }
+
   useEffect(() => {
+    setLog(null)
     if (persona){ setPersonaObj(JSON.parse(persona)) }
   }, [persona])
 
   useEffect(() => { 
-    if (personaObj && chatData.length == 0)
-      sendInitial(chatData, setChatData, personaObj.initialPrompt + "Write OK for confirmation. The questions will be provided by the user in the following messages.", setDisabled, setStatus);
-  }, [personaObj]);
+    setLog(null)
+    if (personaObj && chatData.length == 0){
+      console.log(personaObj)
+      sendInitial(chatData, setChatData, personaObj.initialprompt + "Write OK for confirmation. The questions will be provided by the user in the following messages.", setDisabled, setStatus);
+      logConversation()
+    }
+      
+    }, [personaObj]);
 
   useEffect(() => { 
+    logConversation()
     scrollDown(document.getElementById("chat-body"))
   }, [chatData]);
 
@@ -36,6 +80,7 @@ function Chatbot() {
     !personaObj || status === "Pending" ? setDisabled(true) : setDisabled(false)
   }, [status, personaObj])
 
+  
 
 
   return (
@@ -74,7 +119,9 @@ function Chatbot() {
       <div className='container-fluid d-flex flex-row align-items-center justify-content-center flex-wrap input-wrap'>
         <input className='form-control form-control-md input-form' type="text" onChange = {(e) => setUserTextInput(e.target.value)} value = {userTextInput} placeholder = {status === "Pending" ? "Establishing a connection..." : !personaObj ? ("No persona selected!") : "Ask " + personaObj.name + " something..."} disabled = {!personaObj || status === "Pending" ? true : false}/>
         <button className='btn btn-success' onClick = { (e) => {
-          if (userTextInput.trim() !== "") sendPrompt(chatData, setChatData, userTextInput, setUserTextInput, setDisabled)} } disabled = {disabled}>Send message</button>
+          if (userTextInput.trim() !== ""){
+            sendPrompt(chatData, setChatData, userTextInput, setUserTextInput, setDisabled)
+          } } } disabled = {disabled}>Send message</button>
       </div> 
       {document.getElementById("chat-body") ? scrollDown(document.getElementById("chat-body")) : null}
     </div>

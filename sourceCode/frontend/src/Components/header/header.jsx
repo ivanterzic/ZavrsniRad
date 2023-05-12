@@ -1,10 +1,17 @@
 import React from 'react';
 import './header.css'
 import backend from '../../backendAPI';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import LogIdContext from '../../Context/LogIdContext';
+import ChatDataContext from '../../Context/ChatDataContext';
+import PersonaContext from '../../Context/PersonaContext';
 
 function Header(props) {
+
+    const {chatData, setChatData} = useContext(ChatDataContext)
+    const {log, setLog} = useContext(LogIdContext)
+    const {persona, setPersona} = useContext(PersonaContext)
 
     let navigate = useNavigate()
     let handleLogout = async () => {
@@ -19,6 +26,9 @@ function Header(props) {
         console.log("Action couldn't be logged.")
       }
       sessionStorage.clear()
+      setPersona()
+      setChatData([])
+      setLog(null)
       navigate("/login")
       props.setLoggedIn(false)
     }
@@ -26,9 +36,9 @@ function Header(props) {
     return (
       <div className="nav custom-header d-flex flex-row allign-items-center justify-content-between">
           {JSON.parse(sessionStorage.getItem("username")) !== null && JSON.parse(sessionStorage.getItem("privlevel")) === 3  ? 
-            (<a href="/"><h1>Placeholder text</h1></a>)
+            (<a href="/"><h1>Persona App</h1></a>)
             : 
-            (<h1>Placeholder text</h1>)
+            (<h1>Persona App</h1>)
           }
         
 

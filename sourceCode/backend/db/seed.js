@@ -44,7 +44,7 @@ const sql_create_logs = `CREATE TABLE logs
   logId INT GENERATED ALWAYS AS IDENTITY,
   time TIMESTAMP NOT NULL,
   type VARCHAR(20) NOT NULL,
-  data VARCHAR(7500) NOT NULL,
+  data VARCHAR(10000) NOT NULL,
   username VARCHAR(25) NOT NULL,
   PRIMARY KEY (logId),
   FOREIGN KEY (username) REFERENCES users(username)

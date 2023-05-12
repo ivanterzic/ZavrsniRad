@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import { useState } from 'react';
-import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './index.css';
 import Body from './Pages/Body';
@@ -19,6 +18,7 @@ import {PersonaProvider} from './Context/PersonaContext';
 import {ChatDataProvider} from './Context/ChatDataContext';
 import {DisabledProvider} from './Context/DisabledContext';
 import { UserTextInputProvider } from './Context/UserInputContext';
+import {LogContextProvider} from './Context/LogIdContext';
 
 import NoPage from './Pages/NoPage';
 
@@ -31,6 +31,7 @@ function App() {
 
       <UserTextInputProvider>
         <DisabledProvider>
+          <LogContextProvider>
           <ChatDataProvider>
             <RadioProvider>
                 <PersonaProvider>
@@ -51,6 +52,7 @@ function App() {
                 </PersonaProvider>
               </RadioProvider>
           </ChatDataProvider>
+          </LogContextProvider>
         </DisabledProvider>
       </UserTextInputProvider>
 

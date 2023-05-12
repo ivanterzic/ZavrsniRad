@@ -4,6 +4,8 @@ import './Conversation.css';
 import { scrollDown, generateUniqueId, loader } from '../../Utils/Utils';
 import { sendTwoPersonaPrompt } from '../../Utils/GPTUtils';
 import ProfileAvatar from '../ProfileAvatar/ProfileAvatar';
+import { sanetizeString } from '../../Utils/Utils';
+import backend from '../../backendAPI';
 
 function Conversation(props) {
   
@@ -27,8 +29,49 @@ function Conversation(props) {
     
     const [awaitingMessage, setAwaitingMessage] = useState(false)
 
+    const [twoPersonaLog, setTwoPersonaLog] = useState(null)
+
     let pendingText = "";
     
+    async function logConversation(){
+        let res
+        if (twoPersonaLog === null){
+          try {
+            res = await backend.post('/log', {
+              type : "2_persona_talk",
+              data : (JSON.stringify({
+                topic : sanetizeString(topic),
+                persona1 : sanetizeString(JSON.stringify(persona1)),
+                persona2 : sanetizeString(JSON.stringify(persona2)),
+                chatData : sanetizeString(JSON.stringify(chatData))
+              })),
+              username : JSON.parse(sessionStorage.getItem("username"))
+            })
+            res = res.data[0].logid
+            setTwoPersonaLog(res)
+          }
+          catch (e) {
+            console.log("Action couldn't be logged.")
+          }
+        }
+        else {
+          try {
+            res = await backend.post('/log/update_log', {
+              logid : twoPersonaLog,
+              data : (JSON.stringify({
+                topic : sanetizeString(topic),
+                persona1 : sanetizeString(JSON.stringify(persona1)),
+                persona2 : sanetizeString(JSON.stringify(persona2)),
+                chatData : sanetizeString(JSON.stringify(chatData))
+              })),
+            })
+          }
+          catch (e) {
+            console.log("Action couldn't be logged.")
+          }
+        }
+      }
+
     async function continueConversation(){ 
         if(conversationHappening === true){
             await setTimeout(() => {}, 500)
@@ -49,6 +92,7 @@ function Conversation(props) {
                     pendingText = s[0] + s[1]
                 }
                 chatData.push({"role" : "p2", "content" : pendingText})
+                await logConversation()
                 setTurn(1)
                 setNewMessage(pendingText)  
                 div.remove()
@@ -70,6 +114,7 @@ function Conversation(props) {
                 }
                 chatData.push({"role" : "p1", "content" : pendingText})
                 setTurn(2)
+                await logConversation()
                 setNewMessage(pendingText)
                 div.remove()
             }
@@ -93,7 +138,7 @@ function Conversation(props) {
                 setPersona2Data([
                     {
                         "role" : "user", 
-                    "content" : persona2.initialPrompt + ` The user is in this case ${persona1.name}. The topic of the conversation is ${topic}. ${persona2.name} will initiate the conversation.`
+                    "content" : persona2.initialPrompt + ` The user is in this case ${persona1.name}. The topic of the conversation is ${topic}. ${persona2.name} will initiate the conversation. Generate messages exclusively from the perspective of ${persona2.name}!`
                     }, {
                         "role" : "assistant", 
                         "content" : "OK"
@@ -103,16 +148,16 @@ function Conversation(props) {
                 document.getElementById("p1-typing").appendChild(div)
                 loader(div)
                 try {
-                    pendingText = await sendTwoPersonaPrompt(persona1Data, persona1.initialPrompt + ` The user is in this case ${persona2.name}. The topic of the conversation is ${topic}, initiate a conversation with a short message! Do not generate messages from the user!`, setPersona1Data, persona2.name + ":")
+                    pendingText = await sendTwoPersonaPrompt(persona1Data, persona1.initialPrompt + ` The user is in this case ${persona2.name}. The topic of the conversation is ${topic}, initiate a conversation with a short message!`, setPersona1Data, persona2.name + ":")
                 }
                 catch (e) {
                     alert("An error has occured!")
                     console.log(e)
                 }
-                
                 setChatData([{"role" : "p1", "content" : pendingText}])
                 div.remove()
                 setNewMessage(pendingText)
+                await logConversation()
                 setConversationHappening(true)
                 setConversationStarted(true)
                 setAwaitingMessage(false)
@@ -126,6 +171,7 @@ function Conversation(props) {
     async function changeTopic(e){
             setNewMessage(`I would like to talk about ${topic}, ask me a question about ${topic}!`)
             chatData.push({"role" : "p" + turn, "content" : `I would like to talk about ${topic} now.`})
+            logConversation()
             turn === 1 ? setTurn(2) : setTurn(1)
             alert("New conversation topic set! " + topic)
     }
@@ -143,7 +189,7 @@ function Conversation(props) {
     <>
         <div className='container-fluid d-flex flex-row align-items-center justify-content-center'>
             <div className='d-flex flex-row flex-wrap align-items-center justify-content-around'>
-                <select id = "persona1-select" name = "persona" className="selectpicker p-2 selector" disabled = {conversationHappening} onChange={(e)=>{
+                <select id = "persona1-select" name = "persona" className="selectpicker p-2 selector" disabled = {conversationHappening || awaitingMessage} onChange={(e)=>{
                     setPersona1(JSON.parse(e.target.value))}}>
                     <option selected hidden value={undefined}>Select a persona...</option>
                     {props.categories.map((c) => {
@@ -159,7 +205,7 @@ function Conversation(props) {
                 </select>  
             </div>
             <div className='d-flex flex-row flex-wrap align-items-center justify-content-around'>
-                <select id = "persona2-select" name = "persona" className="selectpicker p-2 selector" disabled = {conversationHappening} onChange={(e)=>{
+                <select id = "persona2-select" name = "persona" className="selectpicker p-2 selector" disabled = {conversationHappening || awaitingMessage} onChange={(e)=>{
                     setPersona2(JSON.parse(e.target.value))}}>
                     <option selected hidden value={undefined}>Select a persona...</option>
                     {props.categories.map((c) => {
@@ -174,7 +220,7 @@ function Conversation(props) {
                     })}  
                 </select>  
             </div>
-            <input value={topic} class="form-control form-control-sm w-25" type="text" placeholder="Pick a topic" disabled = {conversationHappening} onChange = {(e) => {
+            <input value={topic} class="form-control form-control-sm w-25" type="text" placeholder="Pick a topic" disabled = {conversationHappening || awaitingMessage} onChange = {(e) => {
                 setTopic(e.target.value)
             }}></input>
             <button type="button" className="btn btn-success" disabled = {conversationHappening || awaitingMessage} onClick={e => startConversation()}>Submit</button>

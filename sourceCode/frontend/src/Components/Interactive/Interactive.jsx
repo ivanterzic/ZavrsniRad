@@ -7,28 +7,68 @@ import ChatDataContext from '../../Context/ChatDataContext';
 import DisabledContext from '../../Context/DisabledContext';
 import UserTextInputContext from '../../Context/UserInputContext';
 import { sendInitial, sendPrompt } from '../../Utils/GPTUtils';
-
+import backend from '../../backendAPI';
+import { sanetizeString } from '../../Utils/Utils';
+import LogIdContext from '../../Context/LogIdContext';
 function Interactive() {
 
   const {persona} = useContext(PersonaContext)
   const {userTextInput, setUserTextInput} = useContext(UserTextInputContext)
   const {chatData, setChatData} = useContext(ChatDataContext)
   const {disabled, setDisabled} = useContext(DisabledContext)
-  
+  const {log, setLog} = useContext(LogIdContext)
   const [personaObj, setPersonaObj] = useState();
   const [status, setStatus] = useState("No")
  
   const [speakData, setSpeakData] = useState("");
+  
+  async function logConversation(){
+    let res
+    if (log === null){
+      try {
+        res = await backend.post('/log', {
+          type : "conversation",
+          data : (JSON.stringify({
+            persona : sanetizeString(JSON.stringify(persona)),
+            chatData : sanetizeString(JSON.stringify(chatData))
+          })),
+          username : JSON.parse(sessionStorage.getItem("username"))
+        })
+        res = res.data[0].logid
+        setLog(res)
+      }
+      catch (e) {
+        console.log("Action couldn't be logged.")
+      }
+    }
+    else {
+      try {
+        res = await backend.post('/log/update_log', {
+          logid : log,
+          data : (JSON.stringify({
+            persona : sanetizeString(JSON.stringify(persona)),
+            chatData : sanetizeString(JSON.stringify(chatData))
+          })),
+        })
+      }
+      catch (e) {
+        console.log("Action couldn't be logged.")
+      }
+    }
+  }
 
   useEffect(() => {
+    setLog(null)
     if (persona){
       setPersonaObj(JSON.parse(persona))
     }
   }, [persona])
 
   useEffect(() => { 
+    setLog(null)
     if (personaObj && chatData.length == 0)
-      sendInitial(chatData, setChatData, personaObj.initialPrompt, setDisabled, setStatus );
+      sendInitial(chatData, setChatData, personaObj.initialprompt, setDisabled, setStatus );
+      logConversation()
   }, [personaObj]);
   
   useEffect(()=>{
@@ -37,7 +77,7 @@ function Interactive() {
 
     return ( 
         <>
-            <div id='chat-header'></div>
+            
             <div className='container-fluid d-flex flex-row align-items-center justify-content-between flew-wrap'>
                 <div className='wrap'><TextToSpeech data = {speakData}></TextToSpeech></div>
                 <div className='container-fluid d-flex flex-column align-items-center justify-content-center flex-wrap'>
@@ -50,14 +90,15 @@ function Interactive() {
                           if (userTextInput.trim() !== ""){
                             try {
                               let r = await sendPrompt(chatData, setChatData, userTextInput, setUserTextInput, setDisabled)
-                            console.log(r)
-                            setSpeakData(r)
+                              logConversation()
+                              console.log(r)
+                              setSpeakData(r)
+                              logConversation()
                             }
                             catch (e) {
                               alert("An error has occured!")
                               console.log(e)
                             }
-                            
                           }
                           
                           }} disabled = {disabled}>Send message</button>

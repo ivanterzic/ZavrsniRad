@@ -10,12 +10,14 @@ import { sendInitial } from '../../Utils/GPTUtils';
 import text from './text.png'
 import interactive from './interactive.png'
 import conversation from './conversation.png'
+import LogIdContext from '../../Context/LogIdContext';
 
 function SelectOption(props) {
     
     const { radio, setRadio } = useContext(RadioContext);
     const {chatData, setChatData} = useContext(ChatDataContext)
     const {persona, setPersona} = useContext(PersonaContext)
+    const {log,setLog} = useContext(LogIdContext)
 
 
     return (
@@ -43,7 +45,8 @@ function SelectOption(props) {
                         if (resp){
                             chatData.length = 0
                             setChatData([])
-                            sendInitial(chatData, setChatData, JSON.parse(persona).initialPrompt + " The questions will be provided by the user in the following messages.", () => {}, () => {})
+                            setLog(null)
+                            sendInitial(chatData, setChatData, JSON.parse(persona).initialprompt + " The questions will be provided by the user in the following messages.", () => {}, () => {})
                         }
                         
                     }}>Reset conversation</button>

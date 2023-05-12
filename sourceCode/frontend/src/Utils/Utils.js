@@ -26,7 +26,7 @@ export function loader(e) {
 }
 
 export function sanetizeString(prompt){
-  return prompt.replace("'", "''")
+  return prompt.replaceAll("'", "''")
 }
 
 export function checkPrivLevel(level, navigate){
