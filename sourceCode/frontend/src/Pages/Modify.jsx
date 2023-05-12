@@ -73,7 +73,7 @@ function App() {
       personaimageid : imageid.value,
       personagender : gender,
       personavoice : voice.value,
-      creatorusername : sessionStorage.getItem("username"),
+      creatorusername : JSON.parse(sessionStorage.getItem("username")),
       originalpersona : persona.persona.id
     }
     let response

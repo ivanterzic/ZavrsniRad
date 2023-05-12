@@ -14,7 +14,7 @@ function Header(props) {
 
     return (
       <div className="nav custom-header d-flex flex-row allign-items-center justify-content-between">
-          {JSON.parse(sessionStorage.getItem("username")) !== null &&  JSON.parse(sessionStorage.getItem("privlevel")) === 3  ? 
+          {JSON.parse(sessionStorage.getItem("username")) !== null && JSON.parse(sessionStorage.getItem("privlevel")) === 3  ? 
             (<a href="/"><h1>Placeholder text</h1></a>)
             : 
             (<h1>Placeholder text</h1>)
@@ -47,10 +47,10 @@ function Header(props) {
       
           <div className="d-flex flex-column align-items-center justify-content-center">
             {
-            props.loggedIn || sessionStorage.getItem("username") !== null ?
+            props.loggedIn || JSON.parse(sessionStorage.getItem("username")) !== null ?
                 (<>
                   <div>
-                    Welcome {sessionStorage.getItem("username")}!
+                    Welcome {JSON.parse(sessionStorage.getItem("username"))}!
                     You are logged in as {JSON.parse(sessionStorage.getItem("privlevel")) === 1 ? 
                           "an administrator"
                           : 

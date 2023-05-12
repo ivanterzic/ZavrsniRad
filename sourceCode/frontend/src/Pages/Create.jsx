@@ -14,7 +14,7 @@ function App() {
 
   const [voice, setVoice] = useState(""); 
   const [name, setName] = useState(""); 
-  const [gender, setGender] = useState("Male"); 
+  const [gender, setGender] = useState("male"); 
   const [initialPrompt, setInitialPrompt] = useState("")
   const [imageid, setImageId] = useState("")
   const [category, setCategory] = useState("");
@@ -80,10 +80,9 @@ function App() {
       personagender : gender,
       personavoice : personaVoice,
       personacategoryid : personaCat,
-      creatorusername : sanetizeString(sessionStorage.getItem("username"))
+      creatorusername : sanetizeString(JSON.parse(sessionStorage.getItem("username")))
     }
     let response
-    console.log(sendObj)
     try {
       response = await backend.post("/create", sendObj)
       if (response.status === 400){
@@ -99,7 +98,11 @@ function App() {
       }
     } 
     catch(e){
-      setMessage(response.data)
+      if (response.status === 400){
+        setMessage("Bad request!")
+      }
+      else
+        setMessage("Bad request!")
     }
       
   }
@@ -107,7 +110,7 @@ function App() {
   const handleReset = async () => {
     setVoice("")
     setName("") 
-    setGender("Male");
+    setGender("male");
     setInitialPrompt("Provide answers from the perspective of " + name +", **insert a persona description**. " + name + " is eager to answer questions. He is respectful. If asked about emotions, say a random positive emotion. Do not mention you are an AI language model IN ANY CIRCUMSTANCE!")
     setImageId("")
     setCategory("");

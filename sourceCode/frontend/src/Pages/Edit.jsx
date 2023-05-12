@@ -35,7 +35,7 @@ function App() {
       let cat = await backend.get("/categories");
       setCategories(cat.data.map(c => ({value : c.id, name : c.name})))
       response = await backend.post("/personadata/byuser", {
-        username : sessionStorage.getItem("username")
+        username : JSON.parse(sessionStorage.getItem("username"))
       });
       if (response.data.length === 0){
         setMessage("You have no created personas to edit.")
@@ -100,7 +100,7 @@ function App() {
       personagender : gender,
       personavoice : personaVoice,
       personacategoryid : personaCat,
-      creatorusername: sanetizeString(sessionStorage.getItem("username"))
+      creatorusername: sanetizeString(JSON.parse(sessionStorage.getItem("username")))
     }
     let response
     console.log(sendObj)
@@ -140,7 +140,7 @@ function App() {
       setMessage("A persona must be selected!")
       return
     }
-    let resp = window.confirm("Are you sure you want to delete this persona?")
+    let resp = window.confirm("Are you sure you want to delete this persona? This persona and all persona created/modified from this persona will also be deleted!")
     if (!resp){
         return
     }

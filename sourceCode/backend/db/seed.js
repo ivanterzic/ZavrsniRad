@@ -50,12 +50,20 @@ CREATE TABLE Persona
 */
 const {Pool} = require('pg');
 
+/*const pool = new Pool({
+  user: 'projektadmin',
+  host: '161.53.18.24',
+  database: 'PersonaApp',
+  password: '5tz89rg5489ohizg',
+  port: 5432,
+});*/
+
 const pool = new Pool({
-    user: 'projektadmin',
-    host: '161.53.18.24',
-    database: 'PersonaApp',
-    password: '5tz89rg5489ohizg',
-    port: 5432,
+  user: 'postgres',
+  host: 'localhost',
+  database: 'ZavRad',
+  password: 'bazepodataka',
+  port: 5432,
 });
 
 const sql_create_roles = `CREATE TABLE roles
@@ -105,7 +113,7 @@ const sql_create_persona = `CREATE TABLE persona
   PRIMARY KEY (personaId),
   FOREIGN KEY (personaCategoryId) REFERENCES categories(categoryId),
   FOREIGN KEY (creatorUsername) REFERENCES users(username),
-  FOREIGN KEY (originalPersona) REFERENCES persona(personaId)
+  FOREIGN KEY (originalPersona) REFERENCES persona(personaId) ON DELETE CASCADE
 )`;
 
 const sql_insert_roles = `INSERT INTO roles
@@ -127,7 +135,7 @@ const sql_insert_categories = `INSERT INTO categories
     (6, 'Modified')
 `;
 
-const sql_insert_users = `INSERT INTO users (username, password, roleid) VALUES ('admin', 'admin123', 1)`
+const sql_insert_users = `INSERT INTO users (username, password, roleid) VALUES ('admin', 'admin123', 1), ('teach', 'teach123', 2), ('student', 'student123', 3)`
 /*const sql_insert_log*/
 
 const sql_insert_persona =  `INSERT INTO persona 
