@@ -1,5 +1,5 @@
 import React from 'react';
-import './header.css'
+import './Header.css'
 import backend from '../../backendAPI';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
