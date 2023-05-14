@@ -65,11 +65,10 @@ function Chatbot() {
     setLog(null)
     if (personaObj && chatData.length == 0){
       console.log(personaObj)
-      sendInitial(chatData, setChatData, personaObj.initialprompt + "Write OK for confirmation. The questions will be provided by the user in the following messages.", setDisabled, setStatus);
+      sendInitial(chatData, setChatData, personaObj.initialprompt + " Do not mention you are an AI model in any circumstance! Write OK for confirmation. The questions will be provided by the user in the following messages.", setDisabled, setStatus);
       logConversation()
     }
-      
-    }, [personaObj]);
+  }, [personaObj]);
 
   useEffect(() => { 
     logConversation()

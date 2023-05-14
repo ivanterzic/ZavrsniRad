@@ -36,7 +36,6 @@ function PersonaSelector(props) {
                     let resp = window.confirm("Are you sure you want to select this persona: " + JSON.parse(val).name + "? Current chat data will be deleted! ")
                     if (resp){
                         setPersona(val)
-
                         setChatData([])
                     }
                     else {

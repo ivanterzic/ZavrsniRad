@@ -91,6 +91,7 @@ function Conversation(props) {
                     let s = pendingText.split(persona2.name + ":")
                     pendingText = s[0] + s[1]
                 }
+                pendingText = pendingText.split('"').join("")
                 chatData.push({"role" : "p2", "content" : pendingText})
                 await logConversation()
                 setTurn(1)
@@ -112,6 +113,7 @@ function Conversation(props) {
                     let s = pendingText.split(persona1.name + ":")
                     pendingText = s[0] + s[1]
                 }
+                pendingText = pendingText.split('"').join("")
                 chatData.push({"role" : "p1", "content" : pendingText})
                 setTurn(2)
                 await logConversation()
@@ -123,7 +125,6 @@ function Conversation(props) {
     }
 
     async function startConversation(e){
-        
         if (persona1 === undefined || !persona2){
             alert("Please select both personas!")
         }
@@ -138,7 +139,7 @@ function Conversation(props) {
                 setPersona2Data([
                     {
                         "role" : "user", 
-                    "content" : persona2.initialPrompt + ` The user is in this case ${persona1.name}. The topic of the conversation is ${topic}. ${persona2.name} will initiate the conversation. Generate messages exclusively from the perspective of ${persona2.name}!`
+                    "content" : persona2.initialPrompt + ` The user is in this case ${persona1.name}. The topic of the conversation is ${topic}. ${persona2.name} will initiate the conversation. Generate messages exclusively from the perspective of ${persona2.name}! Do not mention you are an AI model in any circumstance!`
                     }, {
                         "role" : "assistant", 
                         "content" : "OK"
@@ -148,7 +149,8 @@ function Conversation(props) {
                 document.getElementById("p1-typing").appendChild(div)
                 loader(div)
                 try {
-                    pendingText = await sendTwoPersonaPrompt(persona1Data, persona1.initialPrompt + ` The user is in this case ${persona2.name}. The topic of the conversation is ${topic}, initiate a conversation with a short message!`, setPersona1Data, persona2.name + ":")
+
+                    pendingText = await sendTwoPersonaPrompt(persona1Data, persona1.initialPrompt + ` The user is in this case ${persona2.name}. The topic of the conversation is ${topic}, initiate a conversation with a short message! Do not mention you are an AI model in any circumstance!`, setPersona1Data, persona2.name + ":")
                 }
                 catch (e) {
                     alert("An error has occured!")
@@ -157,6 +159,7 @@ function Conversation(props) {
                 setChatData([{"role" : "p1", "content" : pendingText}])
                 div.remove()
                 setNewMessage(pendingText)
+                setTurn(2)
                 await logConversation()
                 setConversationHappening(true)
                 setConversationStarted(true)

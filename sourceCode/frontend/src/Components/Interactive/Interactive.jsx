@@ -67,9 +67,11 @@ function Interactive() {
 
   useEffect(() => { 
     setLog(null)
-    if (personaObj && chatData.length == 0)
-      sendInitial(chatData, setChatData, personaObj.initialprompt, setDisabled, setStatus );
+    if (personaObj && chatData.length == 0){
+      sendInitial(chatData, setChatData, personaObj.initialprompt + " Do not mention you are an AI model in any circumstance! Write OK for confirmation. The questions will be provided by the user in the following messages.", setDisabled, setStatus);
       logConversation()
+    }
+   
   }, [personaObj]);
   
   useEffect(()=>{
