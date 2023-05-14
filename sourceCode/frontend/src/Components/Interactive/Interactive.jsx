@@ -10,6 +10,7 @@ import { sendInitial, sendPrompt } from '../../Utils/GPTUtils';
 import backend from '../../backendAPI';
 import { sanetizeString } from '../../Utils/Utils';
 import LogIdContext from '../../Context/LogIdContext';
+
 function Interactive() {
 
   const {persona} = useContext(PersonaContext)
@@ -76,17 +77,15 @@ function Interactive() {
   }, [status, personaObj])
 
     return ( 
-        <>
-            
-            <div className='container-fluid d-flex flex-row align-items-center justify-content-between flew-wrap'>
-                <div className='wrap'><TextToSpeech data = {speakData}></TextToSpeech></div>
-                <div className='container-fluid d-flex flex-column align-items-center justify-content-center flex-wrap'>
-                    <div className='p-4 container-fluid d-flex flex-row align-items-center justify-content-center flex-wrap'>
-                        <input className='form-control form-control-md input-form' type="text" onChange = { (e) => {
-                          setUserTextInput(e.target.value)
-                          
-                        }} value = {userTextInput} placeholder = {status === "Pending" ? "Establishing a connection..." : !personaObj ? ("No persona selected!") : "Ask " + personaObj.name + " something..."} disabled = {!personaObj || status === "Pending" ? true : false}/>
-                        <button className='btn btn-success' onClick = { async (e) => {
+        <>           
+          <div className='container-fluid d-flex flex-row align-items-center justify-content-between flew-wrap'>
+              <div className='wrap'><TextToSpeech data = {speakData}></TextToSpeech></div>
+              <div className='container-fluid d-flex flex-column align-items-center justify-content-center flex-wrap'>
+                  <div className='p-4 container-fluid d-flex flex-row align-items-center justify-content-center flex-wrap'>
+                      <input className='form-control form-control-md input-form' type="text" onChange = { (e) => {
+                        setUserTextInput(e.target.value)
+                      }} value = {userTextInput} placeholder = {status === "Pending" ? "Establishing a connection..." : !personaObj ? ("No persona selected!") : "Ask " + personaObj.name + " something..."} disabled = {!personaObj || status === "Pending" ? true : false}/>
+                      <button className='btn btn-success' onClick = { async (e) => {
                           if (userTextInput.trim() !== ""){
                             try {
                               let r = await sendPrompt(chatData, setChatData, userTextInput, setUserTextInput, setDisabled)
@@ -100,14 +99,13 @@ function Interactive() {
                               console.log(e)
                             }
                           }
-                          
-                          }} disabled = {disabled}>Send message</button>
-                    </div>
-                    <h5>Or...</h5>
-                    <SpeechToText className="w-100" setSpeakData = {setSpeakData}></SpeechToText>
-                </div> 
-            </div>
-        </>
+                        }} disabled = {disabled}>Send message</button>
+                  </div>
+                  <h5>Or...</h5>
+                  <SpeechToText className="w-100" setSpeakData = {setSpeakData}></SpeechToText>
+              </div> 
+          </div>
+      </>
     );
 }
 

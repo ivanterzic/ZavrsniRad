@@ -6,17 +6,17 @@ function sleep(ms) {
 }
 
 export async function sendCompletionRequest(chatData) {
-  await sleep(20000)
   let response = await backend.post("/chatcompletion", chatData)
+  await sleep(20000)
   return response;
 };
 
 export async function sendStopCompletionRequest(chatData, stop) {
-  await sleep(20000)
   let response = await backend.post("/chatcompletion/withstop", {
     "chatData" : chatData,
     "stop" : stop
   })
+  await sleep(20000)
   return response;
 };
 
@@ -49,51 +49,52 @@ export async function sendInitial(chatData, setChatData, prompt, setDisabled, se
 }
 
 export async function sendPrompt(chatData, setChatData, userTextInput, setUserTextInput, setDisabled){
-  setDisabled(true)
-
-  await chatData.push({"role" : "user", "content" : userTextInput})
-  await setChatData(chatData)
-  setUserTextInput("")
-  setDisabled(true)  
-  let div
   try{
-      div = document.createElement("div")
-      document.getElementById("chat-header").appendChild(div)
-      loader(div)
-  } catch(e){console.log(e)}
-  
-  try{scrollDown(document.getElementById("chat-body"))} catch (e) {console.log("No div to scroll down on")}
-  let response
-  try {
-    response = await sendCompletionRequest(chatData)
-    console.log(response)
-    if (response.status == 429){
+    setDisabled(true)
+    await chatData.push({"role" : "user", "content" : userTextInput})
+    await setChatData(chatData)
+    setUserTextInput("")
+    setDisabled(true)  
+    let div
+    try{
+        div = document.createElement("div")
+        document.getElementById("chat-header").appendChild(div)
+        loader(div)
+    } catch(e){console.log(e)}
+    
+    try{scrollDown(document.getElementById("chat-body"))} catch (e) {console.log("No div to scroll down on")}
+    let response
+    try {
+      response = await sendCompletionRequest(chatData)
+      console.log(response)
+      if (response.status == 429){
+        try {
+          div.remove()
+        } catch (e) {console.log(e)}
+        setDisabled(false)
+        alert("OpenAI API is overcrowded.")
+        return
+      }
+    } catch (e) {
       try {
         div.remove()
       } catch (e) {console.log(e)}
       setDisabled(false)
-      alert("OpenAI API is overcrowded.")
+      alert("An error has occured while reaching OpenAI API")
       return
-    }
-  } catch (e) {
-    try {
-      div.remove()
-    } catch (e) {console.log(e)}
+    } 
+    await setChatData([...chatData, {"role" : "assistant", "content" : response.data.content}])
     setDisabled(false)
+    try{
+        div.remove()
+    } catch (e) {console.log(e)}
+    console.log(chatData)  
+      return response.data.content
+  }
+  catch (e){
     alert("An error has occured while reaching OpenAI API")
-    return
-  } 
-  console.log(response)
-  /*const response = await openai.createChatCompletion({model: "gpt-3.5-turbo", messages: chatData});*/
-
-  console.log(response.data);
-  await setChatData([...chatData, {"role" : "assistant", "content" : response.data.content}])
-  setDisabled(false)
-  try{
-      div.remove()
-  } catch (e) {console.log(e)}
-  console.log(chatData)  
-    return response.data.content
+  }
+  
 }
 
 export async function sendTwoPersonaPrompt(chatData, textInput, setChatData, stop){

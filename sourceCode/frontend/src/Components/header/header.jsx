@@ -41,7 +41,6 @@ function Header(props) {
             (<h1>Persona App</h1>)
           }
         
-
         <div>
             {
               JSON.parse(sessionStorage.getItem("privlevel")) === 1 ? 
@@ -63,9 +62,7 @@ function Header(props) {
               ) : null
             }
         </div>
-        
-           
-      
+              
           <div className="d-flex flex-column align-items-center justify-content-center">
             {
             props.loggedIn || JSON.parse(sessionStorage.getItem("username")) !== null ?

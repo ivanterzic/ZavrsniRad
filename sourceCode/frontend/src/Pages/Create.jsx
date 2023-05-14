@@ -230,8 +230,7 @@ function App() {
           <button className='btn btn-success' onClick={handleClick}>Submit</button>
           <button className='btn btn-light' onClick={handleReset}>Reset</button>
         </div>
-      </div>
-      
+      </div> 
   );
 }
 

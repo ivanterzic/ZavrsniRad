@@ -32,26 +32,26 @@ function App() {
       <UserTextInputProvider>
         <DisabledProvider>
           <LogContextProvider>
-          <ChatDataProvider>
-            <RadioProvider>
-                <PersonaProvider>
-                  <Router>
-                    <Header loggedIn = {loggedIn} setLoggedIn = {setLoggedIn}></Header>
-                    <Routes>
-                        <Route path="/" element={<Body />} /> 
-                        <Route path ="login" element={<Login loggedIn = {loggedIn} setLoggedIn = {setLoggedIn}/>} />
-                        <Route path="modify" element={<Modify />} />
-                        <Route path="create" element={<Create />} />
-                        <Route path="edit" element={<Edit />} />
-                        <Route path="createuser" element={<CreateUser />} />
-                        <Route path="noaccess" element={<NoAccess />} />
-                        <Route path="*" element={<NoPage />}>
-                      </Route>
-                    </Routes>
-                  </Router>
-                </PersonaProvider>
-              </RadioProvider>
-          </ChatDataProvider>
+            <ChatDataProvider>
+              <RadioProvider>
+                  <PersonaProvider>
+                    <Router>
+                      <Header loggedIn = {loggedIn} setLoggedIn = {setLoggedIn}></Header>
+                      <Routes>
+                          <Route path="/" element={<Body />} /> 
+                          <Route path ="login" element={<Login loggedIn = {loggedIn} setLoggedIn = {setLoggedIn}/>} />
+                          <Route path="modify" element={<Modify />} />
+                          <Route path="create" element={<Create />} />
+                          <Route path="edit" element={<Edit />} />
+                          <Route path="createuser" element={<CreateUser />} />
+                          <Route path="noaccess" element={<NoAccess />} />
+                          <Route path="*" element={<NoPage />}>
+                        </Route>
+                      </Routes>
+                    </Router>
+                  </PersonaProvider>
+                </RadioProvider>
+            </ChatDataProvider>
           </LogContextProvider>
         </DisabledProvider>
       </UserTextInputProvider>
