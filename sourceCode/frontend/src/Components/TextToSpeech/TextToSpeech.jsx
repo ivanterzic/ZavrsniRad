@@ -46,7 +46,9 @@ function TextToSpeech(props) {
             response = await backend.post("/getvoice", request)
         }
         catch(e){
-            alert("An error has occured!")
+           
+        alert("An error has occured while fetching voices!")
+
             console.log(e)
             return
         }

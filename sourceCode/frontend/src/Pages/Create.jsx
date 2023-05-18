@@ -28,11 +28,14 @@ function App() {
       setVoices(response.data.map(voice => ({
         value : voice.name, language : voice.language, sample : voice.sample, gender : voice.gender
       })));
-      let cat = await backend.get("/categories");
-      setCategories(cat.data.map(c => ({value : c.id, name : c.name})))
+      let categories = await backend.get("/categories");
+      setCategories(categories.data.map(c => ({value : c.id, name : c.name})))
     } catch (e) {
       alert(e);
     } 
+    finally {
+      console.log("Data fetch done.")
+    }
   }
 
   const handleClick = async () => {

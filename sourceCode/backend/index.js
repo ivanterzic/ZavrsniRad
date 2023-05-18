@@ -6,7 +6,7 @@ var upload = multer();
 var cors = require('cors')
 
 const app = express();
-const PORT = 5300;
+
 
 const personaRouter = require('./routes/persona.routes')
 const voiceRouter = require('./routes/voice.routes')
@@ -23,9 +23,9 @@ app.options('/', cors)
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json()); 
 app.use(upload.array()); 
+
 app.use(express.static('public'));
 
-//solution to fix invalid requests from the frontend (request header parameter error)
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', "*");
   next();
@@ -48,7 +48,7 @@ app.use('/roles', rolesRouter)
 app.use('/createuser', createuserRouter)
 app.use('/edit', editRouter)
 app.use('/log', logsRouter)
-
+const PORT = 5300;
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
