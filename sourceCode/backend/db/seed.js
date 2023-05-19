@@ -1,20 +1,20 @@
 const {Pool} = require('pg');
 
-/*const pool = new Pool({
+const pool = new Pool({
   user: 'projektadmin',
   host: '161.53.18.24',
   database: 'PersonaApp',
   password: '5tz89rg5489ohizg',
   port: 5432,
-});*/
+});
 
-const pool = new Pool({
+/*const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'ZavRad',
   password: 'bazepodataka',
   port: 5432,
-});
+});*/
 
 const sql_create_roles = `CREATE TABLE roles
 (
