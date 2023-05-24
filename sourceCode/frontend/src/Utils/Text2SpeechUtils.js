@@ -24,7 +24,6 @@ export function convertString(string){
         for (let word of string.split(" ")){
             word = word.replace(".", "")
             word = word.replace(",", "")
-            console.log(word)
             if (/^\d+$/.test(word)){
                 output += num2words(word)
             }

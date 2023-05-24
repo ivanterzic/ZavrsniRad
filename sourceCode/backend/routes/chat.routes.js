@@ -7,7 +7,6 @@ const model = "gpt-3.5-turbo"
 const {OPENAI_API_KEY} = require('../data/openai_api_key')
 const configuration = new Configuration({ apiKey: OPENAI_API_KEY, });
 const openai = new OpenAIApi(configuration);
-
 router.post("/", async (req, res) => {
     chatData = req.body
     console.log(chatData)
@@ -21,7 +20,7 @@ router.post("/", async (req, res) => {
         if(response.status == 429){
             console.log(response)
             res.status(429)
-            res.send()
+            res.send(response)
         }
         res.send(response.data.choices[0].message);
     }
@@ -29,8 +28,7 @@ router.post("/", async (req, res) => {
         res.status(400)
         console.log(e)
         res.send()
-    }
-    
+    } 
 });
 
 router.post("/withstop", async (req, res) => {

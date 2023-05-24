@@ -38,7 +38,6 @@ const sql_create_users = `CREATE TABLE users
   PRIMARY KEY (username),
   FOREIGN KEY (roleId) REFERENCES roles(roleId)
 )`;
-
 const sql_create_logs = `CREATE TABLE logs
 (
   logId INT GENERATED ALWAYS AS IDENTITY,
