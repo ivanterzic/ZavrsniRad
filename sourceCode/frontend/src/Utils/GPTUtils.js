@@ -7,7 +7,7 @@ function sleep(ms) {
 
 export async function sendCompletionRequest(chatData) {
   let response = await backend.post("/chatcompletion", chatData)
-  await sleep(20000)
+  //await sleep(20000)
   return response;
 };
 
